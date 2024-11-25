@@ -12,6 +12,7 @@ DROP TABLE IF EXISTS CareerPaths;
 DROP TABLE IF EXISTS TechSkills;
 DROP TABLE IF EXISTS AcademicCourses;
 DROP TABLE IF EXISTS Users;
+drop table if exists JobMarketInsights;
 
 
 

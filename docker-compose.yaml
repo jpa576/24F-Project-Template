@@ -23,16 +23,18 @@ services:
 
 
   api:
-      build:
-        context: ./api
-      container_name: web-api
-      environment:
-        - MYSQL_USER=${MYSQL_USER}
-        - MYSQL_PASSWORD=${MYSQL_PASSWORD}
-        - MYSQL_HOST=${MYSQL_HOST}
-        - MYSQL_PORT=${MYSQL_PORT}
-        - MYSQL_DATABASE=${MYSQL_DATABASE}
-      volumes:
-        - ./api:/apicode
-      ports:
-        - "4000:4000"
+    build:
+      context: ./api
+    container_name: web-api
+    environment:
+      - MYSQL_USER=${MYSQL_USER}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+      - MYSQL_HOST=${MYSQL_HOST}
+      - MYSQL_PORT=${MYSQL_PORT}
+      - MYSQL_DATABASE=${MYSQL_DATABASE}
+    volumes:
+      - ./api:/apicode
+    ports:
+      - "4000:4000"
+    depends_on:
+      - db

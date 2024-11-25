@@ -15,24 +15,26 @@ courses = Blueprint('courses', __name__)
 
 #------------------------------------------------------------
 
-@courses.route('/debug', methods=['GET'])
-def debug_connection():
+@courses.route('/data', methods=['GET'])
+def get_data():
+    connection = None
+    cursor = None
     try:
-        # Establish the database connection
         connection = pymysql.connect(
             host=os.getenv('MYSQL_HOST', 'localhost'),
             user=os.getenv('MYSQL_USER', 'root'),
             password=os.getenv('MYSQL_PASSWORD', ''),
-            database=os.getenv('MYSQL_DATABASE', ''),  # Ensure this is set
+            database=os.getenv('MYSQL_DATABASE', ''),
             port=int(os.getenv('MYSQL_PORT', 3306))
         )
         cursor = connection.cursor()
-        cursor.execute("SELECT DATABASE();")  # Verify the selected database
-        current_db = cursor.fetchone()
-        return jsonify({"database": current_db[0]})
+        cursor.execute("SELECT * FROM AcademicCourses")
+        data = cursor.fetchall()
+        return jsonify(data)
     except Exception as e:
         return jsonify({"error": str(e)}), 500
     finally:
-        cursor.close()
-        connection.close()
-
+        if cursor:
+            cursor.close()
+        if connection:
+            connection.close()
