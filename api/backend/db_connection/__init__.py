@@ -12,6 +12,7 @@ import os
 db = MySQL(cursorclass=cursors.DictCursor)
 
 
+
 # Establish the database connection
 connection = pymysql.connect(
     host=os.getenv('MYSQL_HOST', 'localhost'),
@@ -20,3 +21,5 @@ connection = pymysql.connect(
     database=os.getenv('MYSQL_DATABASE', ''),  # Ensure this is set
     port=int(os.getenv('MYSQL_PORT', 3306))
 )
+
+
