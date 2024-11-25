@@ -34,13 +34,14 @@ SideBarLinks(show_home=True)
 
 # set the title of the page and provide a simple prompt. 
 logger.info("Loading the Home page of the app")
-st.title('CS 3200 Sample Semester Project App')
+st.title('CS 3200 Sample Semester Project App: Algonauts edition')
 st.write('\n\n')
-st.write('### HI! As which user would you like to log in?')
+st.write('### Howdy! As which user would you like to log in?')
 
 # For each of the user personas for which we are implementing
 # functionality, we put a button on the screen that the user 
-# can click to MIMIC logging in as that mock user. 
+# can click to MIMIC logging in as that mock user.
+
 
 if st.button("Act as John, a Political Strategy Advisor", 
             type = 'primary', 
@@ -73,5 +74,12 @@ if st.button('Act as System Administrator',
     st.session_state['first_name'] = 'SysAdmin'
     st.switch_page('pages/20_Admin_Home.py')
 
-
+#create the ui button for 1st user case
+if st.button('Algonauts user #1',
+            type = 'primary',
+            use_container_width=True):
+    st.session_state['authenticated'] = True
+    st.session_state['role'] = ''
+    st.session_state['first_name'] = 'Master'
+    st.switch_page('pages/01a_algonauts_user1_home.py')
 

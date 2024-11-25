@@ -8,7 +8,7 @@ from flask import request
 from flask import jsonify
 from flask import make_response
 from flask import current_app
-from backend.db_connection import db
+from api.backend.db_connection import db
 
 #------------------------------------------------------------
 # Create a new Blueprint object, which is a collection of 
@@ -136,6 +136,41 @@ def get_10_most_expensive_products():
     
 
 # ------------------------------------------------------------
+
+# ------------------------------------------------------------
+# Route to get the 8 most frequently ordered products.
+@products.route('/topOrderedProducts', methods=['GET'])
+def get_top_ordered_products():
+    query = '''
+        SELECT p.product_name,
+               s.supplier_name,
+               COUNT(o.order_id) AS order_count
+        FROM products p
+        JOIN order_items oi ON p.product_id = oi.product_id
+        JOIN orders o ON oi.order_id = o.order_id
+        JOIN suppliers s ON p.supplier_id = s.supplier_id
+        GROUP BY p.product_name, s.supplier_name
+        ORDER BY order_count DESC, p.product_name
+        LIMIT 8
+    '''
+
+    cursor = db.get_db().cursor()
+    cursor.execute(query)
+    theData = cursor.fetchall()
+
+    # Transform the data into a list of dictionaries
+    column_names = [desc[0] for desc in cursor.description]
+    json_data = []
+    for row in theData:
+        json_data.append(dict(zip(column_names, row)))
+
+    response = make_response(jsonify(json_data))
+    response.status_code = 200
+    return response
+
+
+# ------------------------------------------------------------
+
 # This is a POST route to add a new product.
 # Remember, we are using POST routes to create new entries
 # in the database. 
@@ -206,3 +241,5 @@ def update_product():
     current_app.logger.info(product_info)
 
     return "Success"
+
+
