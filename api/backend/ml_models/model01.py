@@ -3,7 +3,7 @@ model01.py is an example of how to access model parameter values that you are st
 in the database and use them to make a prediction when a route associated with prediction is
 accessed. 
 """
-from api.backend.db_connection import db
+from backend.db_connection import db
 import numpy as np
 import logging
 

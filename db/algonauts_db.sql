@@ -1,7 +1,4 @@
-DROP DATABASE IF EXISTS algonauts_db;
-CREATE DATABASE algonauts_db;
-USE algonauts_db;
-
+use algonauts_db;
 -- Drop tables in the correct order to handle foreign key dependencies
 DROP TABLE IF EXISTS UserCodingSubmissions;
 DROP TABLE IF EXISTS CodingAssessments;
@@ -142,6 +139,17 @@ CREATE TABLE JobMarketInsights (
     data_source VARCHAR(100)
 );
 
+INSERT INTO AcademicCourses (department, course_number, course_name, course_description, credits) VALUES
+('CS', '1100', 'Computer Science and Its Applications', 'Introduces students to the field of computer science and the patterns of thinking that enable them to become intelligent users of software tools in a problem-solving setting.', 4),
+('CS', '1800', 'Discrete Structures', 'Introduces the mathematical structures and methods that form the foundation of computer science.', 4),
+('CS', '2500', 'Fundamentals of Computer Science 1', 'Introduces the fundamental ideas of computing and the principles of programming.', 4),
+('CS', '2510', 'Fundamentals of Computer Science 2', 'Continues CS 2500. Examines object-oriented programming and associated algorithms using more complex data structures as the focus.', 4),
+('CS', '2800', 'Logic and Computation', 'Introduces formal logic and its connections to computer and information science.', 4),
+('CS', '3000', 'Algorithms and Data', 'Introduces the fundamental concepts of algorithms and data structures.', 4),
+('CS', '3500', 'Object-Oriented Design', 'Covers the principles of object-oriented design and programming.', 4),
+('CS', '3650', 'Computer Systems', 'Introduces the fundamental concepts of computer systems.', 4),
+('CS', '3700', 'Networks and Distributed Systems', 'Introduces the fundamental concepts of computer networks and distributed systems.', 4),
+('CS', '3800', 'Theory of Computation', 'Introduces the fundamental concepts of theoretical computer science.', 4);
 
 
 

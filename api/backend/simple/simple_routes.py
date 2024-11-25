@@ -1,7 +1,7 @@
 from flask import Blueprint, request, jsonify, make_response, current_app, redirect, url_for
 import json
-from api.backend.db_connection import db
-from api.backend.simple.playlist import sample_playlist_data
+from backend.db_connection import db
+from backend.simple.playlist import sample_playlist_data
 
 # This blueprint handles some basic routes that you can use for testing
 simple_routes = Blueprint('simple_routes', __name__)
@@ -14,7 +14,7 @@ simple_routes = Blueprint('simple_routes', __name__)
 @simple_routes.route('/')
 def welcome():
     current_app.logger.info('GET / handler')
-    welcome_message = '<h1>Welcome to the CS 3200 Project Template REST API'
+    welcome_message = '<h1>Welcome to the CS 3200 Project Template REST API: Algonauts edition'
     response = make_response(welcome_message)
     response.status_code = 200
     return response

@@ -7,27 +7,32 @@ services:
     ports:
       - 8501:8501
 
-  api:
-    build: ./api
-    container_name: web-api
-    hostname: web-api
-    volumes: ['./api:/apicode']
-    ports:
-      - 4000:4000
-
-
-# MySQL Database Service
   db:
     image: mysql:latest
     container_name: algonauts_mysql
     environment:
-      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
-      MYSQL_DATABASE: ${MYSQL_DATABASE}
-      MYSQL_USER: ${MYSQL_USER}
-      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}  # Root password for MySQL
+      MYSQL_DATABASE: ${MYSQL_DATABASE}          # Database name to auto-create
+      MYSQL_USER: ${MYSQL_USER}                  # User to auto-create
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}          # Password for the created user
     ports:
-      - "3306:3306"
+      - "3306:3306"                              # Map port 3306 on the host to 3306 in the container
     volumes:
-      - ./db:/docker-entrypoint-initdb.d
-    restart: always
+      - ./db:/docker-entrypoint-initdb.d         # Mount the ./db folder for initialization scripts
+    restart: always                              # Ensure the service restarts automatically
 
+
+  api:
+      build:
+        context: ./api
+      container_name: web-api
+      environment:
+        - MYSQL_USER=${MYSQL_USER}
+        - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+        - MYSQL_HOST=${MYSQL_HOST}
+        - MYSQL_PORT=${MYSQL_PORT}
+        - MYSQL_DATABASE=${MYSQL_DATABASE}
+      volumes:
+        - ./api:/apicode
+      ports:
+        - "4000:4000"

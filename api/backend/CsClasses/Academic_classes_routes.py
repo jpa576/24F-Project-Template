@@ -3,44 +3,74 @@
 # Remove this file if you are not using it in your project
 ########################################################
 from flask import Blueprint
-from flask import request
-from flask import jsonify
-from flask import make_response
-from flask import current_app
+from flask import request, jsonify, make_response, current_app
 from backend.db_connection import db
-from backend.ml_models.model01 import predict
 
 #------------------------------------------------------------
-# Create a new Blueprint object, which is a collection of
-# routes.
-Courses = Blueprint('courses', __name__)
+from flask import Blueprint, jsonify
+import pymysql
+import os
+
+courses = Blueprint('courses', __name__)
+
+@courses.route('/debug', methods=['GET'])
+def debug_connection():
+    try:
+        # Establish the database connection
+        connection = pymysql.connect(
+            host=os.getenv('MYSQL_HOST', 'localhost'),
+            user=os.getenv('MYSQL_USER', 'root'),
+            password=os.getenv('MYSQL_PASSWORD', ''),
+            database=os.getenv('MYSQL_DATABASE', ''),  # Ensure this is set
+            port=int(os.getenv('MYSQL_PORT', 3306))
+        )
+        cursor = connection.cursor()
+        cursor.execute("SELECT DATABASE();")  # Verify the selected database
+        current_db = cursor.fetchone()
+        return jsonify({"database": current_db[0]})
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+    finally:
+        cursor.close()
+        connection.close()
 
 
-## Get all academic courses from the system
-@Courses.route('/courses', methods=['GET'])
+#------------------------------------------------------------
+
+
+courses = Blueprint('courses', __name__)
+
+@courses.route('/courses', methods=['GET'])
 def get_courses():
     try:
-        # Get a cursor object from the database connection
-        cursor = db.get_db().cursor()
+        # Get a database connection
+        db = get_db()
+        cursor = db.cursor()
 
         # Query to fetch all academic courses
-        cursor.execute('''
-            SELECT department, course_number, course_name, course_description, credits
+        query = '''
+            SELECT department,
+                   course_number,
+                   course_name,
+                   course_description,
+                   credits
             FROM AcademicCourses
-        ''')
+        '''
 
-        # Fetch all the rows from the result
-        the_data = cursor.fetchall()
+        # Logging the query for debugging purposes
+        current_app.logger.info(f'GET /courses query={query}')
 
-        # Create the response with the fetched data
-        the_response = make_response(jsonify(the_data))
-        the_response.status_code = 200
-        return the_response
+        # Execute the query and fetch the results
+        cursor.execute(query)
+        courses_data = cursor.fetchall()
 
+        # Logging the fetched data for debugging purposes
+        current_app.logger.info(f'GET /courses Result of query = {courses_data}')
+
+        # Prepare and return the response
+        return jsonify(courses_data), 200
     except Exception as e:
-        # Return an error response in case of failure
-        return make_response(jsonify({"error": str(e)}), 500)
-
+        current_app.logger.error(f'Error fetching courses: {e}')
+        return jsonify({"error": str(e)}), 500
     finally:
-        # Ensure the cursor is closed after the operation
         cursor.close()

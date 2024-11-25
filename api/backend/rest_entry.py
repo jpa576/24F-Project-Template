@@ -1,11 +1,13 @@
 from flask import Flask
-from api.backend.db_connection import db
-from api.backend.customers.customer_routes import customers
-from api.backend.products.products_routes import products
-from api.backend.simple.simple_routes import simple_routes
 
+from backend.CsClasses.Academic_classes_routes import courses
+from backend.db_connection import db
+from backend.customers.customer_routes import customers
+from backend.products.products_routes import products
+from backend.simple.simple_routes import simple_routes
 import os
 from dotenv import load_dotenv
+
 
 def create_app():
     app = Flask(__name__)
@@ -19,10 +21,9 @@ def create_app():
     # Configure MySQL connection
     app.config['MYSQL_DATABASE_USER'] = os.getenv('MYSQL_USER')
     app.config['MYSQL_DATABASE_PASSWORD'] = os.getenv('MYSQL_PASSWORD')
-    app.config['MYSQL_DATABASE_HOST'] = os.getenv('MYSQL_HOST')
-    app.config['MYSQL_DATABASE_PORT'] = int(os.getenv('MYSQL_PORT'))
-    app.config['MYSQL_DATABASE_DB'] = os.getenv('MYSQL_NAME')
-
+    app.config['MYSQL_DATABASE_HOST'] = os.getenv('MYSQL_HOST')  # Should resolve to 'algonauts_mysql'
+    app.config['MYSQL_DATABASE_PORT'] = int(os.getenv('MYSQL_PORT')) # Ensure this is an integer
+    app.config['MYSQL_DATABASE_NAME'] = os.getenv('MYSQL_DATABASE')
     # Initialize the database object with the settings above
     app.logger.info('Starting the database connection')
     db.init_app(app)
@@ -30,7 +31,7 @@ def create_app():
     # Register the routes from each Blueprint with the app object
     app.logger.info('Registering blueprints with Flask app object.')
     app.register_blueprint(simple_routes)
-    app.register_blueprint(customers, url_prefix='/c')
     app.register_blueprint(products, url_prefix='/p')
+    app.register_blueprint(courses, url_prefix='/c')
 
     return app
