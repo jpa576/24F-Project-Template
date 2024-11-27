@@ -10,9 +10,14 @@ DROP TABLE IF EXISTS UserCareerProgress;
 DROP TABLE IF EXISTS CareerPathSkills;
 DROP TABLE IF EXISTS CareerPaths;
 DROP TABLE IF EXISTS TechSkills;
+DROP TABLE IF EXISTS RequiredCourses;
+drop table if exists ConcentrationCourses;
+drop table if exists AcademicConcentrations;
 DROP TABLE IF EXISTS AcademicCourses;
 DROP TABLE IF EXISTS Users;
 drop table if exists JobMarketInsights;
+drop table if exists AcademicPrograms;
+
 
 
 
@@ -140,17 +145,44 @@ CREATE TABLE JobMarketInsights (
     data_source VARCHAR(100)
 );
 
-INSERT INTO AcademicCourses (department, course_number, course_name, course_description, credits) VALUES
-('CS', '1100', 'Computer Science and Its Applications', 'Introduces students to the field of computer science and the patterns of thinking that enable them to become intelligent users of software tools in a problem-solving setting.', 4),
-('CS', '1800', 'Discrete Structures', 'Introduces the mathematical structures and methods that form the foundation of computer science.', 4),
-('CS', '2500', 'Fundamentals of Computer Science 1', 'Introduces the fundamental ideas of computing and the principles of programming.', 4),
-('CS', '2510', 'Fundamentals of Computer Science 2', 'Continues CS 2500. Examines object-oriented programming and associated algorithms using more complex data structures as the focus.', 4),
-('CS', '2800', 'Logic and Computation', 'Introduces formal logic and its connections to computer and information science.', 4),
-('CS', '3000', 'Algorithms and Data', 'Introduces the fundamental concepts of algorithms and data structures.', 4),
-('CS', '3500', 'Object-Oriented Design', 'Covers the principles of object-oriented design and programming.', 4),
-('CS', '3650', 'Computer Systems', 'Introduces the fundamental concepts of computer systems.', 4),
-('CS', '3700', 'Networks and Distributed Systems', 'Introduces the fundamental concepts of computer networks and distributed systems.', 4),
-('CS', '3800', 'Theory of Computation', 'Introduces the fundamental concepts of theoretical computer science.', 4);
+CREATE TABLE AcademicPrograms (
+    program_id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    program_name VARCHAR(100) NOT NULL,
+    degree_type ENUM('BS', 'BA', 'MS', 'PhD') NOT NULL,
+    department VARCHAR(100) NOT NULL,
+    description TEXT
+);
+
+CREATE TABLE RequiredCourses (
+    program_id INT UNSIGNED NOT NULL,
+    department VARCHAR(10) NOT NULL,
+    course_number VARCHAR(10) NOT NULL,
+    requirement_type ENUM('Required', 'Elective') DEFAULT 'Required',
+    requirement_category ENUM('Overview', 'Fundamental', 'Required', 'Security', 'Presentation', 'Elective') NOT NULL,
+    PRIMARY KEY (program_id, department, course_number),
+    FOREIGN KEY (program_id) REFERENCES AcademicPrograms(program_id) ON DELETE CASCADE,
+    FOREIGN KEY (department, course_number) REFERENCES AcademicCourses(department, course_number) ON DELETE CASCADE
+);
+
+CREATE TABLE AcademicConcentrations (
+    concentration_id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    program_id INT UNSIGNED NOT NULL,
+    concentration_name VARCHAR(100) NOT NULL,
+    description TEXT,
+    FOREIGN KEY (program_id) REFERENCES AcademicPrograms(program_id) ON DELETE CASCADE
+);
+
+CREATE TABLE ConcentrationCourses (
+    concentration_id INT UNSIGNED NOT NULL,
+    department VARCHAR(10) NOT NULL,
+    course_number VARCHAR(10) NOT NULL,
+    PRIMARY KEY (concentration_id, department, course_number),
+    FOREIGN KEY (concentration_id) REFERENCES AcademicConcentrations(concentration_id) ON DELETE CASCADE,
+    FOREIGN KEY (department, course_number) REFERENCES AcademicCourses(department, course_number) ON DELETE CASCADE
+);
+
+
+
 
 
 
