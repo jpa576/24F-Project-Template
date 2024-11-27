@@ -31,8 +31,7 @@ INSERT INTO AcademicCourses (department, course_number, course_name, course_desc
 ('CS', '4150', 'Game Artificial Intelligence', 'Application of AI techniques in game development.', 4),
 ('CS', '4610', 'Robotic Science and Systems', 'Exploration of robotic systems and their underlying science.', 4),
 ('DS', '4420', 'Machine Learning and Data Mining 2', 'Advanced topics in machine learning and data mining.', 4),
-('IS', '4200', 'Information Retrieval', 'Techniques and models for retrieving information from large datasets.', 4),
-('PSYC', '3466', 'Cognition', 'Examination of cognitive processes in humans.', 4);
+('IS', '4200', 'Information Retrieval', 'Techniques and models for retrieving information from large datasets.', 4);
 -- Concentration in Foundations
 INSERT INTO AcademicCourses (department, course_number, course_name, course_description, credits) VALUES
 ('CS', '4820', 'Computer-Aided Reasoning', 'Study of tools and techniques for automated reasoning.', 4),
@@ -89,8 +88,7 @@ INSERT INTO ConcentrationCourses (concentration_id, department, course_number) V
 (1, 'CS', '4150'),  -- Game Artificial Intelligence
 (1, 'CS', '4610'),  -- Robotic Science and Systems
 (1, 'DS', '4420'),  -- Machine Learning and Data Mining 2
-(1, 'IS', '4200'),  -- Information Retrieval
-(1, 'PSYC', '3466'); -- Cognition
+(1, 'IS', '4200');  -- Information Retrieval
 
 -- Foundations Concentration
 -- Assuming concentration_id 2 corresponds to 'Foundations'

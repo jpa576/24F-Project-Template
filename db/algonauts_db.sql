@@ -44,7 +44,8 @@ CREATE TABLE AcademicCourses (
 CREATE TABLE TechSkills (
   tech_skill_id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
   skill_name VARCHAR(100) UNIQUE NOT NULL,
-  complexity ENUM('Beginner', 'Intermediate', 'Advanced') NOT NULL
+  complexity ENUM('Beginner', 'Intermediate', 'Advanced') NOT NULL,
+  description TEXT
 );
 
 -- Create User Course Progress Table
