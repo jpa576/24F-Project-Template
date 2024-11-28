@@ -77,3 +77,15 @@ def get_courses_without_skills():
     except Exception as e:
         current_app.logger.error(f"Error fetching courses without skills: {e}")
         return jsonify({"error": "An error occurred while fetching courses without skills."}), 500
+
+    @courses.route('/test', methods=['GET'])
+    def get_all_courses():
+        try:
+            connection = get_db_connection()
+            with connection.cursor() as cursor:
+                cursor.execute("show tables")
+                data = cursor.fetchall()
+            return jsonify(data)
+        except Exception as e:
+            current_app.logger.error(f"Error fetching all courses: {e}")
+            return jsonify({"error": "An error occurred while fetching courses."}), 500

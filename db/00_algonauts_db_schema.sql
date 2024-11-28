@@ -1,5 +1,8 @@
 use algonauts_db;
--- Drop tables in the correct order to handle foreign key dependencies
+-- Disable foreign key checks to allow dropping tables without constraint issues
+SET FOREIGN_KEY_CHECKS = 0;
+
+-- Drop child tables first
 DROP TABLE IF EXISTS UserCodingSubmissions;
 DROP TABLE IF EXISTS CodingAssessments;
 DROP TABLE IF EXISTS UserSkills;
@@ -8,27 +11,30 @@ DROP TABLE IF EXISTS CourseTechSkills;
 DROP TABLE IF EXISTS CoursePrerequisites;
 DROP TABLE IF EXISTS UserCareerProgress;
 DROP TABLE IF EXISTS CareerPathSkills;
+DROP TABLE IF EXISTS RequiredCourses;
+DROP TABLE IF EXISTS ConcentrationCourses;
+DROP TABLE IF EXISTS SemesterCourses;
+DROP TABLE IF EXISTS Semesters;
+
+-- Drop intermediate tables
+DROP TABLE IF EXISTS AcademicPlans;
+DROP TABLE IF EXISTS AcademicConcentrations;
+DROP TABLE IF EXISTS AcademicPrograms;
+
+-- Drop parent tables
 DROP TABLE IF EXISTS CareerPaths;
 DROP TABLE IF EXISTS TechSkills;
-DROP TABLE IF EXISTS RequiredCourses;
-drop table if exists ConcentrationCourses;
-drop table if exists AcademicConcentrations;
 DROP TABLE IF EXISTS AcademicCourses;
 DROP TABLE IF EXISTS Users;
-drop table if exists JobMarketInsights;
-drop table if exists AcademicPrograms;
+DROP TABLE IF EXISTS JobMarketInsights;
+
+-- Re-enable foreign key checks
+SET FOREIGN_KEY_CHECKS = 1;
 
 
 
 
 
--- Create Users Table
-CREATE TABLE Users (
-  user_id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-  name VARCHAR(100) NOT NULL,
-  email VARCHAR(100) UNIQUE NOT NULL,
-  year INT DEFAULT 0
-);
 
 -- Create Academic Courses Table with Composite Primary Key
 CREATE TABLE AcademicCourses (
@@ -48,16 +54,6 @@ CREATE TABLE TechSkills (
   description TEXT
 );
 
--- Create User Course Progress Table
-CREATE TABLE UserCourseProgress (
-  progress_id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-  user_id INT UNSIGNED NOT NULL,
-  department VARCHAR(10) NOT NULL,
-  course_number VARCHAR(10) NOT NULL,
-  progress_status VARCHAR(20) DEFAULT 'in-progress',
-  FOREIGN KEY (user_id) REFERENCES Users(user_id) ON DELETE CASCADE,
-  FOREIGN KEY (department, course_number) REFERENCES AcademicCourses(department, course_number) ON DELETE CASCADE
-);
 
 -- Mapping Academic Courses to Tech Skills
 CREATE TABLE CourseTechSkills (
@@ -87,27 +83,6 @@ CREATE TABLE CareerPaths (
   description TEXT,
   required_skills TEXT
 );
-
--- Create User Skills Table
-CREATE TABLE UserSkills (
-  user_skill_id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-  user_id INT UNSIGNED NOT NULL,
-  tech_skill_id INT UNSIGNED NOT NULL,
-  acquired_date DATE DEFAULT NULL,
-  FOREIGN KEY (user_id) REFERENCES Users(user_id) ON DELETE CASCADE,
-  FOREIGN KEY (tech_skill_id) REFERENCES TechSkills(tech_skill_id) ON DELETE CASCADE
-);
-
--- Create User Career Progress Table
-CREATE TABLE UserCareerProgress (
-  progress_id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-  user_id INT UNSIGNED NOT NULL,
-  career_path_id INT UNSIGNED NOT NULL,
-  progress_percentage DECIMAL(5,2) DEFAULT 0.00,
-  FOREIGN KEY (user_id) REFERENCES Users(user_id) ON DELETE CASCADE,
-  FOREIGN KEY (career_path_id) REFERENCES CareerPaths(career_path_id) ON DELETE CASCADE
-);
-
 CREATE TABLE CareerPathSkills (
     career_path_id INT UNSIGNED NOT NULL,
     tech_skill_id INT UNSIGNED NOT NULL,
@@ -124,20 +99,7 @@ CREATE TABLE CodingAssessments (
     FOREIGN KEY (skill_id) REFERENCES TechSkills(tech_skill_id)
 );
 
-CREATE TABLE UserCodingSubmissions (
-    submission_id INT PRIMARY KEY AUTO_INCREMENT,
-    user_id INT UNSIGNED,
-    assessment_id INT UNSIGNED,
-    career_path_id INT UNSIGNED,
-    submitted_code TEXT,
-    execution_result TEXT,
-    score DECIMAL(5,2),
-    status ENUM('correct', 'incorrect') DEFAULT 'incorrect',
-    submission_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (user_id) REFERENCES Users(user_id),
-    FOREIGN KEY (assessment_id) REFERENCES CodingAssessments(assessment_id),
-    FOREIGN KEY (career_path_id) REFERENCES CareerPaths(career_path_id)
-);
+
 CREATE TABLE JobMarketInsights (
     insight_id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     job_title VARCHAR(100) NOT NULL,
@@ -182,8 +144,84 @@ CREATE TABLE ConcentrationCourses (
     FOREIGN KEY (department, course_number) REFERENCES AcademicCourses(department, course_number) ON DELETE CASCADE
 );
 
+CREATE TABLE AcademicPlans (
+    plan_id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    plan_name VARCHAR(255) NOT NULL,
+    concentration_id INT UNSIGNED NOT NULL,
+    description TEXT,
+    FOREIGN KEY (concentration_id) REFERENCES AcademicConcentrations(concentration_id) ON DELETE CASCADE
+);
 
+CREATE TABLE Semesters (
+    semester_id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    plan_id INT UNSIGNED NOT NULL,
+    semester_name VARCHAR(50) NOT NULL,
+    sequence_number INT NOT NULL,
+    FOREIGN KEY (plan_id) REFERENCES AcademicPlans(plan_id) ON DELETE CASCADE
+);
 
+CREATE TABLE SemesterCourses (
+    semester_course_id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    semester_id INT UNSIGNED NOT NULL,
+    department VARCHAR(10) NOT NULL,
+    course_number VARCHAR(10) NOT NULL,
+    FOREIGN KEY (semester_id) REFERENCES Semesters(semester_id) ON DELETE CASCADE,
+    FOREIGN KEY (department, course_number) REFERENCES AcademicCourses(department, course_number) ON DELETE CASCADE
+);
 
+-- Create Users Table
+CREATE TABLE Users (
+  user_id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(100) NOT NULL,
+  email VARCHAR(100) UNIQUE NOT NULL,
+  year INT DEFAULT 0,
+  plan_id INT UNSIGNED,
+  FOREIGN KEY (plan_id) REFERENCES AcademicPlans(plan_id) ON DELETE SET NULL
+);
 
+CREATE TABLE UserCodingSubmissions (
+    submission_id INT PRIMARY KEY AUTO_INCREMENT,
+    user_id INT UNSIGNED,
+    assessment_id INT UNSIGNED,
+    career_path_id INT UNSIGNED,
+    submitted_code TEXT,
+    execution_result TEXT,
+    score DECIMAL(5,2),
+    status ENUM('correct', 'incorrect') DEFAULT 'incorrect',
+    submission_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES Users(user_id),
+    FOREIGN KEY (assessment_id) REFERENCES CodingAssessments(assessment_id),
+    FOREIGN KEY (career_path_id) REFERENCES CareerPaths(career_path_id)
+        );
+
+-- Create User Course Progress Table
+CREATE TABLE UserCourseProgress (
+  progress_id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  user_id INT UNSIGNED NOT NULL,
+  department VARCHAR(10) NOT NULL,
+  course_number VARCHAR(10) NOT NULL,
+  progress_status VARCHAR(20) DEFAULT 'in-progress',
+  FOREIGN KEY (user_id) REFERENCES Users(user_id) ON DELETE CASCADE,
+  FOREIGN KEY (department, course_number) REFERENCES AcademicCourses(department, course_number) ON DELETE CASCADE
+);
+
+-- Create User Skills Table
+CREATE TABLE UserSkills (
+  user_skill_id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  user_id INT UNSIGNED NOT NULL,
+  tech_skill_id INT UNSIGNED NOT NULL,
+  acquired_date DATE DEFAULT NULL,
+  FOREIGN KEY (user_id) REFERENCES Users(user_id) ON DELETE CASCADE,
+  FOREIGN KEY (tech_skill_id) REFERENCES TechSkills(tech_skill_id) ON DELETE CASCADE
+);
+
+-- Create User Career Progress Table
+CREATE TABLE UserCareerProgress (
+  progress_id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  user_id INT UNSIGNED NOT NULL,
+  career_path_id INT UNSIGNED NOT NULL,
+  progress_percentage DECIMAL(5,2) DEFAULT 0.00,
+  FOREIGN KEY (user_id) REFERENCES Users(user_id) ON DELETE CASCADE,
+  FOREIGN KEY (career_path_id) REFERENCES CareerPaths(career_path_id) ON DELETE CASCADE
+);
 
