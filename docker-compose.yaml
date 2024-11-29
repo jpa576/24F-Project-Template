@@ -6,9 +6,6 @@ services:
     volumes: ['./app/src:/appcode']
     ports:
       - 8501:8501
-    depends_on:
-      api:
-        condition: service_healthy
 
   db:
     image: mysql:latest
@@ -23,11 +20,7 @@ services:
     volumes:
       - ./db:/docker-entrypoint-initdb.d         # Mount the ./db folder for initialization scripts
     restart: always                              # Ensure the service restarts automatically
-    healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
-      interval: 10s
-      timeout: 5s
-      retries: 3
+
 
   api:
     build:
@@ -44,10 +37,4 @@ services:
     ports:
       - "4000:4000"
     depends_on:
-      db:
-        condition: service_healthy
-    healthcheck:
-        test: [ "CMD", "curl", "-f", "http://localhost:4000" ]
-        interval: 10s
-        timeout: 5s
-        retries: 3
+      - db

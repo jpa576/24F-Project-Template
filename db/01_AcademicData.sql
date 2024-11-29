@@ -138,4 +138,22 @@ INSERT INTO ConcentrationCourses (concentration_id, department, course_number) V
 (5, 'CS', '4610'),  -- Robotic Science and Systems
 (5, 'CS', '4710'),  -- Mobile and Wireless Systems
 (5, 'CY', '4760');  -- Security of Wireless and Mobile Systems
+-- ---------INSERT FOR COURSE PREREQS
+INSERT INTO CoursePrerequisites (department, course_number, prerequisite_department, prerequisite_number) VALUES
+('CS', '1802', 'CS', '1800'),  -- Seminar for CS 1800 requires Discrete Structures
+('CS', '2500', 'CS', '1800'),  -- Fundamentals of Computer Science 1 requires Discrete Structures
+('CS', '2501', 'CS', '2500'),  -- Lab for CS 2500 requires Fundamentals of Computer Science 1
+('CS', '2510', 'CS', '2500'),  -- Fundamentals of Computer Science 2 requires Fundamentals of Computer Science 1
+('CS', '2511', 'CS', '2510'),  -- Lab for CS 2510 requires Fundamentals of Computer Science 2
+('CS', '2800', 'CS', '1800'),  -- Logic and Computation requires Discrete Structures
+('CS', '3000', 'CS', '2510'),  -- Algorithms and Data requires Fundamentals of Computer Science 2
+('CS', '3500', 'CS', '2510'),  -- Object-Oriented Design requires Fundamentals of Computer Science 2
+('CS', '3501', 'CS', '3500'),  -- Lab for CS 3500 requires Object-Oriented Design
+('CS', '3650', 'CS', '2510'),  -- Computer Systems requires Fundamentals of Computer Science 2
+('CS', '3700', 'CS', '3650'),  -- Networks and Distributed Systems requires Computer Systems
+('CS', '3800', 'CS', '2800'),  -- Theory of Computation requires Logic and Computation
+('CS', '4500', 'CS', '3500'),  -- Software Development requires Object-Oriented Design
+('CS', '4530', 'CS', '3500'),  -- Fundamentals of Software Engineering requires Object-Oriented Design
+('CY', '3740', 'CY', '2550'),  -- Systems Security requires Foundations of Cybersecurity
+('CY', '4740', 'CY', '3740');  -- Network Security requires Systems Security
 
