@@ -81,7 +81,7 @@ CREATE TABLE CareerPaths (
   career_path_id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
   career_name VARCHAR(100) NOT NULL,
   description TEXT,
-  required_skills TEXT
+  salary int
 );
 CREATE TABLE CareerPathSkills (
     career_path_id INT UNSIGNED NOT NULL,
