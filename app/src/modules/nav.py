@@ -14,16 +14,6 @@ def AboutPageNav():
     st.sidebar.page_link("pages/30_About.py", label="About", icon="🧠")
 
 
-
-
-
-
-#### ------------------------ User one example test -----------------------------------------
-def AlgonautsUser1home():
-    st.sidebar.page_link("pages/01a_algonauts_user1_home.py", label="See what awaits you", icon=":)")
-
-
-
 #### ------------------------ Examples for Role of pol_strat_advisor ------------------------
 def PolStratAdvHomeNav():
     st.sidebar.page_link(
@@ -58,7 +48,7 @@ def ClassificationNav():
     )
 
 
-# ------------------------ System Admin Role -----------------------------------------------
+#### ------------------------ System Admin Role ------------------------
 def AdminPageNav():
     st.sidebar.page_link("pages/20_Admin_Home.py", label="System Admin", icon="🖥️")
     st.sidebar.page_link(

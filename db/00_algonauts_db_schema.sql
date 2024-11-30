@@ -153,23 +153,6 @@ CREATE TABLE AcademicPlans (
     FOREIGN KEY (concentration_id) REFERENCES AcademicConcentrations(concentration_id) ON DELETE CASCADE
 );
 
-CREATE TABLE Semesters (
-    semester_id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-    plan_id INT UNSIGNED NOT NULL,
-    semester_name VARCHAR(50) NOT NULL,
-    sequence_number INT NOT NULL,
-    FOREIGN KEY (plan_id) REFERENCES AcademicPlans(plan_id) ON DELETE CASCADE
-);
-
-CREATE TABLE SemesterCourses (
-    semester_course_id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-    semester_id INT UNSIGNED NOT NULL,
-    department VARCHAR(10) NOT NULL,
-    course_number VARCHAR(10) NOT NULL,
-    FOREIGN KEY (semester_id) REFERENCES Semesters(semester_id) ON DELETE CASCADE,
-    FOREIGN KEY (department, course_number) REFERENCES AcademicCourses(department, course_number) ON DELETE CASCADE
-);
-
 -- Create Users Table
 CREATE TABLE Users (
   user_id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,

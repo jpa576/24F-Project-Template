@@ -78,7 +78,7 @@ def get_courses_without_skills():
         current_app.logger.error(f"Error fetching courses without skills: {e}")
         return jsonify({"error": "An error occurred while fetching courses without skills."}), 500
 
-@courses.route('/course_info', methods=['GET'])
+@courses.route('/career paths', methods=['GET'])
 def course_info():
     try:
         connection = get_db_connection()

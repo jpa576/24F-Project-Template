@@ -110,167 +110,132 @@ INSERT INTO CareerPaths (career_name, description, salary) VALUES
 
 
 
--- Here is where insert statements for some career path skills
-
+-- Here are insert statements for some career path skills
 INSERT INTO CareerPathSkills (career_path_id, tech_skill_id) VALUES
--- Software Engineer
+-- AI/ML Engineer
 (1, 1),  -- Python
-(1, 3),  -- Java
-(1, 4),  -- C++
-(1, 13), -- HTML
-(1, 14), -- CSS
-(1, 45), -- Software Engineering
+(1, 72), -- Machine Learning
+(1, 73), -- Data Mining Techniques
+(1, 74), -- Predictive Modeling
+(1, 76), -- AI Algorithms
+(1, 40), -- Shell Scripting
+(1, 9),  -- Kotlin (mobile ML applications)
+(1, 85), -- TensorFlow
+(1, 86), -- Deep Learning
+(1, 87), -- Big Data Analytics
+
 
 -- Data Scientist
 (2, 1),  -- Python
-(2, 10), -- R
-(2, 11), -- SQL
-(2, 46), -- Data Mining Techniques
-(2, 47), -- Predictive Modeling
-(2, 57), -- Big Data Analytics
+(2, 12), -- SQL
+(2, 70), -- Data Analysis
+(2, 69), -- Statistics
+(2, 72), -- Machine Learning
+(2, 73), -- Data Mining Techniques
+(2, 14), -- CSS (used for presenting analytics results)
+(2, 75), -- Simulation
 
 -- Cybersecurity Analyst
-(3, 38), -- Cybersecurity Principles
-(3, 39), -- Threat Analysis
-(3, 40), -- System Vulnerability Assessment
-(3, 42), -- Network Defense
-(3, 43), -- Cryptography
+(3, 78), -- Cryptography
+(3, 80), -- Threat Analysis
+(3, 81), -- System Vulnerability Assessment
+(3, 79), -- Security Protocols
+(3, 24), -- Assembly Language (low-level exploits)
+(3, 40), -- Shell Scripting
+(3, 17), -- Ruby (used in cybersecurity tools)
+(3, 77), -- Simulation (used in threat modeling)
 
 -- Web Developer
 (4, 2),  -- JavaScript
 (4, 13), -- HTML
 (4, 14), -- CSS
-(4, 15), -- TypeScript
-(4, 55), -- Human-Computer Interaction
+(4, 16), -- TypeScript
+(4, 17), -- Ruby
+(4, 40), -- Shell Scripting
+(4, 1),  -- Python (backend)
 
--- Mobile Application Developer
+-- Mobile App Developer
 (5, 8),  -- Swift
 (5, 9),  -- Kotlin
-(5, 4),  -- C++
-(5, 48), -- Game AI Development
-(5, 49), -- Simulation
+(5, 1),  -- Python
+(5, 15), -- Java
+(5, 68), -- Advanced Programming Techniques
+(5, 70), -- Data Analysis (app analytics)
+(5, 40), -- Shell Scripting
 
--- Cloud Solutions Architect
-(6, 18), -- Shell Scripting
-(6, 42), -- Network Defense
-(6, 20), -- Go
-(6, 56), -- System Design
-(6, 58), -- Verification Techniques
-
--- DevOps Engineer
-(7, 18), -- Shell Scripting
-(7, 42), -- Network Defense
-(7, 57), -- Big Data Analytics
-(7, 61), -- Project Management
-
--- AI Research Scientist
-(8, 1),  -- Python
-(8, 44), -- AI Algorithms
-(8, 47), -- Predictive Modeling
-(8, 48), -- NLP Techniques
-(8, 59), -- Advanced Machine Learning
-
--- IT Project Manager
-(9, 61), -- Project Management
-(9, 62), -- Research Methodologies
-(9, 63), -- Technical Writing
-
--- Blockchain Developer
-(10, 1),  -- Python
-(10, 42), -- Network Defense
-(10, 43), -- Cryptography
-(10, 20), -- Go
-(10, 56); -- System Design
+-- Cloud Engineer
+(6, 70), -- Data Analysis
+(6, 72), -- Machine Learning
+(6, 82), -- Cloud Computing
+(6, 79), -- Security Protocols
+(6, 40), -- Shell Scripting
+(6, 78), -- Cryptography (data security)
+(6, 4),  -- C++ (infrastructure)
 
 -- Game Developer
-INSERT INTO CareerPathSkills (career_path_id, tech_skill_id) VALUES
-(11, 1),  -- Python
-(11, 2),  -- JavaScript
-(11, 4),  -- C++
-(11, 48), -- Game AI Development
-(11, 49), -- Simulation
-(11, 59); -- Advanced Machine Learning
+(12, 4),  -- C++
+(12, 78), -- Cryptography (online game security)
+(12, 68), -- Advanced Programming Techniques
+(12, 75), -- Game AI Development
+(12, 77), -- Simulation
+(12, 9),  -- Kotlin (mobile games)
+(12, 70), -- Data Analysis (player behavior analysis)
+
+-- Quality Assurance Engineer
+(20, 4),  -- C++
+(20, 1),  -- Python (testing scripts)
+(20, 40), -- Shell Scripting (automation)
+(20, 71), -- Debugging
+(20, 69), -- Statistics (test case analysis)
 
 -- Robotics Engineer
-INSERT INTO CareerPathSkills (career_path_id, tech_skill_id) VALUES
-(12, 4),  -- C++
-(12, 30), -- Assembly Language
-(12, 50), -- Robotics Engineering
-(12, 51), -- Control Systems
-(12, 60); -- Computational Efficiency
+(15, 1),  -- Python
+(15, 4),  -- C++
+(15, 68), -- Advanced Programming Techniques
+(15, 69), -- Statistics
+(15, 82), -- System Design
+(15, 83), -- Control Systems
+(15, 84), -- Robotics Engineering
+
+-- Blockchain Developer
+(14, 78), -- Cryptography
+(14, 79), -- Security Protocols
+(14, 4),  -- C++
+(14, 19), -- Rust
+(14, 70), -- Data Analysis
+(14, 81), -- System Vulnerability Assessment
+(14, 88), -- Smart Contracts
+(14, 89), -- Distributed Systems
+
+-- Additional Career Path Examples
+
+-- DevOps Engineer
+(7, 40), -- Shell Scripting
+(7, 72), -- Machine Learning
+(7, 68), -- Advanced Programming Techniques
+(7, 79), -- Security Protocols
+(7, 69), -- Statistics
 
 -- Database Administrator
-INSERT INTO CareerPathSkills (career_path_id, tech_skill_id) VALUES
-(13, 11), -- SQL
-(13, 1),  -- Python
-(13, 61), -- System Design
-(13, 62); -- Data Retrieval Systems
+(10, 12), -- SQL
+(10, 1),  -- Python
+(10, 40), -- Shell Scripting
+(10, 69), -- Statistics
+(10, 78),-- Cryptography
 
--- Network Administrator
-INSERT INTO CareerPathSkills (career_path_id, tech_skill_id) VALUES
-(14, 42), -- Network Defense
-(14, 18), -- Shell Scripting
-(14, 39), -- Threat Analysis
-(14, 40); -- System Vulnerability Assessment
+-- UX/UI Designer
+(13, 2),  -- JavaScript
+(13, 13), -- HTML
+(13, 14), -- CSS
+(13, 72), -- Machine Learning
+(13, 70), -- Data Analysis
+(13, 90), -- User-Centered Design
+(13, 91), -- Accessibility Standards
 
--- Machine Learning Engineer
-INSERT INTO CareerPathSkills (career_path_id, tech_skill_id) VALUES
-(15, 1),  -- Python
-(15, 59), -- Advanced Machine Learning
-(15, 47), -- Predictive Modeling
-(15, 46), -- Data Mining Techniques
-(15, 44); -- AI Algorithms
-
--- UI/UX Designer
-INSERT INTO CareerPathSkills (career_path_id, tech_skill_id) VALUES
-(16, 13), -- HTML
-(16, 14), -- CSS
-(16, 2),  -- JavaScript
-(16, 55), -- Human-Computer Interaction
-(16, 57); -- Design Application
 
 -- Embedded Systems Engineer
-INSERT INTO CareerPathSkills (career_path_id, tech_skill_id) VALUES
-(17, 4),  -- C++
-(17, 25), -- VHDL
-(17, 26), -- Verilog
-(17, 30), -- Assembly Language
-(17, 56); -- System Design
-
--- Cybersecurity Consultant
-INSERT INTO CareerPathSkills (career_path_id, tech_skill_id) VALUES
-(18, 39), -- Threat Analysis
-(18, 42), -- Network Defense
-(18, 43), -- Cryptography
-(18, 38), -- Cybersecurity Principles
-(18, 41); -- Security Protocols
-
--- Backend Developer
-INSERT INTO CareerPathSkills (career_path_id, tech_skill_id) VALUES
-(19, 1),  -- Python
-(19, 11), -- SQL
-(19, 5),  -- C#
-(19, 20), -- Go
-(19, 56); -- System Design
-
--- Frontend Developer
-INSERT INTO CareerPathSkills (career_path_id, tech_skill_id) VALUES
-(20, 2),  -- JavaScript
-(20, 13), -- HTML
-(20, 14), -- CSS
-(20, 15), -- TypeScript
-(20, 55); -- Human-Computer Interaction
-
--- Systems Analyst
-INSERT INTO CareerPathSkills (career_path_id, tech_skill_id) VALUES
-(21, 56), -- System Design
-(21, 57), -- Design Application
-(21, 38), -- Cybersecurity Principles
-(21, 60); -- Computational Efficiency
-
--- Research Scientist
-INSERT INTO CareerPathSkills (career_path_id, tech_skill_id) VALUES
-(22, 62), -- Research Methodologies
-(22, 63), -- Technical Writing
-(22, 64), -- Research Presentation
-(22, 65); -- Critical Analysis
+(18, 4),  -- C++
+(18, 9),  -- Kotlin
+(18, 24), -- Assembly Language
+(18, 40), -- Shell Scripting
+(18, 84); -- Robotics Engineering
