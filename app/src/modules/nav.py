@@ -13,8 +13,17 @@ def HomeNav():
 def AboutPageNav():
     st.sidebar.page_link("pages/30_About.py", label="About", icon="🧠")
 
+#--------------- Role of a job market enthusiast-------------
+def JobFanHomeNav():
+    st.sidebar.page_link("pages/00_user1_home_jobmarketfan.py", label= "job market homepage", icon="🧠")
+def SkillsNav():
+    st.sidebar.page_link("pages/01_indemand_skills.py", label="view tech skills that the market needs", icon="🧠")
+def CareerNav():
+    st.sidebar.page_link("pages/02_InDemand_Careers.py", label="view cs careers that the market has in demand", icon="🧠")
 
-#### ------------------------ Examples for Role of pol_strat_advisor ------------------------
+
+
+#### ------------------------ Role of pol_strat_advisor ------------------------
 def PolStratAdvHomeNav():
     st.sidebar.page_link(
         "pages/00_Pol_Strat_Home.py", label="Political Strategist Home", icon="👤"
@@ -76,6 +85,12 @@ def SideBarLinks(show_home=False):
 
     # Show the other page navigators depending on the users' role.
     if st.session_state["authenticated"]:
+        #show the page links if user is a job market enthusiast
+        if st.session_state["role"]== "Job Market Enthusiast":
+            SkillsNav()
+            CareerNav()
+
+
 
         # Show World Bank Link and Map Demo Link if the user is a political strategy advisor role.
         if st.session_state["role"] == "pol_strat_advisor":

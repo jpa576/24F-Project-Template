@@ -8,6 +8,8 @@ from backend.simple.simple_routes import simple_routes
 import os
 from dotenv import load_dotenv
 
+from api.backend.Tech_Careers.Career_routes import careers
+
 
 def create_app():
     app = Flask(__name__)
@@ -34,5 +36,6 @@ def create_app():
     app.register_blueprint(products, url_prefix='/p')
     app.register_blueprint(courses, url_prefix='/c')
     app.register_blueprint(tech_skills, url_prefix='/ts')
+    app.register_blueprint(careers, url_prefix='/careers')
 
     return app
