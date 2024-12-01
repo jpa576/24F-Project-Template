@@ -22,34 +22,16 @@ def close_db_connection(exception):
         db.close()
 
 @tech_skills.route('/all_skills', methods=['GET'])
-def get_all_courses():
+def get_all_skills():
     try:
         connection = get_db_connection()
         with connection.cursor() as cursor:
-            cursor.execute("SELECT * FROM TechSkills")
+            cursor.execute("""
+                SELECT tech_skill_id, skill_name, complexity, description
+                            FROM TechSkills""")
             data = cursor.fetchall()
         return jsonify(data)
     except Exception as e:
         current_app.logger.error(f"Error fetching all courses: {e}")
         return jsonify({"error": "An error occurred while fetching courses."}), 500
-
-@tech_skills.route('/career_skills', methods=['GET'])
-def get_concentration_courses():
-    try:
-        connection = get_db_connection()
-        with connection.cursor() as cursor:
-            cursor.execute("""
-                SELECT
-                  cp.career_name, ts.skill_name
-                FROM
-                    CareerPathSkills cps
-                    join algonauts_db.CareerPaths cp on cp.career_path_id = cps.career_path_id
-                    join algonauts_db.TechSkills ts on ts.tech_skill_id = cps.tech_skill_id
-                    order by cp.career_name
-                """)
-            data = cursor.fetchall()
-        return jsonify(data)
-    except Exception as e:
-        current_app.logger.error(f"Error fetching concentration courses: {e}")
-        return jsonify({"error": "An error occurred while fetching concentration courses."}), 500
 

@@ -50,25 +50,16 @@ st.markdown("### 🎯 **Get Started**")
 col1, col2, col3 = st.columns(3)
 
 with col1:
-    if st.button("🔎 Explore Roles & Salaries"):
-        st.session_state["page"] = "salary_explorer"
-        #st.experimental_set_query_params(page="salary_explorer")
-        st.success("Redirecting to Salary Explorer...")
-        st.stop()
+    if st.button("📊 View Skills in Demand"):
+        st.switch_page('pages/01_indemand_skills.py')
 
 with col2:
-    if st.button("📊 View Skills in Demand"):
-        st.session_state["page"] = "skills_analysis"
-        #st.experimental_set_query_params(page="skills_analysis")
-        st.success("Redirecting to Skills Analysis...")
-        st.stop()
+    if st.button("🔎 Explore Roles & Salaries"):
+        st.switch_page('pages/02_InDemand_Careers.py')
 
 with col3:
-    if st.button("🌍 Explore Regional Trends"):
-        st.session_state["page"] = "regional_trends"
-        #st.experimental_set_query_params(page="regional_trends")
-        st.success("Redirecting to Regional Trends...")
-        st.stop()
+    if st.button("🌍 Explore Careers and their Required Skills"):
+        st.switch_page('pages/03_career_skills.py')
 
 # Footer with Contact Information and Data Credibility
 st.write("")

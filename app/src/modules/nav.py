@@ -15,7 +15,7 @@ def AboutPageNav():
 
 #--------------- Role of a job market enthusiast-------------
 def JobFanHomeNav():
-    st.sidebar.page_link("pages/00_user1_home_jobmarketfan.py", label= "job market homepage", icon="🧠")
+    st.sidebar.page_link("pages/00_jobmarket_home.py", label= "job market homepage", icon="🧠")
 def SkillsNav():
     st.sidebar.page_link("pages/01_indemand_skills.py", label="view tech skills that the market needs", icon="🧠")
 def CareerNav():
@@ -87,6 +87,7 @@ def SideBarLinks(show_home=False):
     if st.session_state["authenticated"]:
         #show the page links if user is a job market enthusiast
         if st.session_state["role"]== "Job Market Enthusiast":
+            JobFanHomeNav()
             SkillsNav()
             CareerNav()
 

@@ -55,7 +55,7 @@ if st.button("Jack the Job Market Enthusiast",
     # finally, we ask streamlit to switch to another page, in this case, the 
     # landing page for this particular user type
     logger.info("Logging in as jack- job market enthusiast")
-    st.switch_page('pages/00_user1_home_jobmarketfan.py')
+    st.switch_page('pages/00_jobmarket_home.py')
 
 if st.button('Act as Mohammad, an USAID worker', 
             type = 'primary', 
