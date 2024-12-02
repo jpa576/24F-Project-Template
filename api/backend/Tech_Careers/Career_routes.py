@@ -50,6 +50,28 @@ def get_career_skills():
             data = cursor.fetchall()
         return jsonify(data)
     except Exception as e:
-        current_app.logger.error(f"Error fetching concentration courses: {e}")
-        return jsonify({"error": "An error occurred while fetching concentration courses."}), 500
+        current_app.logger.error(f"Error fetching data: {e}")
+        return jsonify({"error": "An error occurred while fetching data."}), 500
 
+@careers.route('/career_noskills', methods=['GET'])
+def get_career_noskills():
+    try:
+        connection = get_db_connection()
+        with connection.cursor() as cursor:
+            cursor.execute("""
+                SELECT
+                    cp.career_name
+                FROM
+                    algonauts_db.CareerPaths cp
+                LEFT JOIN
+                    algonauts_db.CareerPathSkills cps ON cp.career_path_id = cps.career_path_id
+                WHERE
+                    cps.career_path_id IS NULL
+                ORDER BY
+                    cp.career_name;
+            """)
+            data = cursor.fetchall()
+        return jsonify(data)
+    except Exception as e:
+        current_app.logger.error(f"Error fetching careers without skills: {e}")
+        return jsonify({"error": "An error occurred while fetching careers without skills."}), 500

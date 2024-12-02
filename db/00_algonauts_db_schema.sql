@@ -91,6 +91,7 @@ CREATE TABLE CareerPaths (
 CREATE TABLE CareerPathSkills (
     career_path_id INT UNSIGNED NOT NULL,
     tech_skill_id INT UNSIGNED NOT NULL,
+    relevance DECIMAL (4,2),
     PRIMARY KEY (career_path_id, tech_skill_id),
     FOREIGN KEY (career_path_id) REFERENCES CareerPaths(career_path_id) ON DELETE CASCADE,
     FOREIGN KEY (tech_skill_id) REFERENCES TechSkills(tech_skill_id) ON DELETE CASCADE

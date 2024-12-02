@@ -78,4 +78,15 @@ INSERT INTO TechSkills (skill_name, complexity, category, popularity_score, desc
     ('Cryptography', 'Advanced', 'Technical Skill', 59.00, 'Practice of secure communication in the presence of adversaries.'),
     ('AI Algorithms', 'Advanced', 'Technical Skill', 58.00, 'Algorithms designed to perform tasks that typically require human intelligence.'),
     ('Machine Learning', 'Advanced', 'Technical Skill', 57.00, 'Study of computer algorithms that improve automatically through experience.');
+-- Adding more skills to the TechSkills table
+INSERT INTO TechSkills (skill_name, complexity, category, popularity_score, description) VALUES
+    ('Unity/Unreal Engine Basics', 'Intermediate', 'Development Tool', 80.00, 'Foundational knowledge of game development platforms Unity and Unreal Engine.'),
+    ('Cloud-Specific Security Concepts', 'Intermediate', 'Cloud Computing', 75.00, 'Understanding of security practices specific to cloud environments.'),
+    ('3D Modeling', 'Intermediate', 'Design Skill', 85.00, 'Ability to create 3D models using software like AutoCAD or Blender.'),
+    ('Quantum Theory Basics', 'Advanced', 'Mathematics', 90.00, 'Basic principles of quantum mechanics relevant to computing.'),
+    ('Creative Writing Basics', 'Beginner', 'Creative Skill', 65.00, 'Skills to create narratives, particularly useful for storytelling in games.'),
+    ('Cross-Platform Development', 'Intermediate', 'Programming Skill', 70.00, 'Developing software compatible with multiple platforms.'),
+    ('Mobile UI/UX Design', 'Intermediate', 'Design Skill', 75.00, 'Creating intuitive interfaces for mobile applications.'),
+    ('Web Performance Optimization', 'Intermediate', 'Web Development', 70.00, 'Techniques to improve the performance of web applications.'),
+    ('Responsive Design', 'Intermediate', 'Web Development', 80.00, 'Designing applications to work seamlessly across devices.')
 
