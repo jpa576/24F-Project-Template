@@ -24,6 +24,7 @@ DROP TABLE IF EXISTS AcademicPrograms;
 -- Drop parent tables
 DROP TABLE IF EXISTS CareerPaths;
 DROP TABLE IF EXISTS TechSkills;
+DROP TABLE IF EXISTS InterviewQuestions;
 DROP TABLE IF EXISTS AcademicCourses;
 DROP TABLE IF EXISTS Users;
 DROP TABLE IF EXISTS JobMarketInsights;
@@ -32,8 +33,13 @@ DROP TABLE IF EXISTS JobMarketInsights;
 SET FOREIGN_KEY_CHECKS = 1;
 
 
-
-
+-- Create Interview Questions Table
+CREATE TABLE InterviewQuestions (
+    question_id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    question TEXT NOT NULL,
+    skill VARCHAR(100) NOT NULL,
+    difficulty ENUM('Easy', 'Medium', 'Hard') NOT NULL
+);
 
 
 -- Create Academic Courses Table with Composite Primary Key
