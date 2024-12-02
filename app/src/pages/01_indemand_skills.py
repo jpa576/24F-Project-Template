@@ -1,28 +1,37 @@
 import requests
 import streamlit as st
 import pandas as pd
+import plotly.express as px
 from modules.nav import SideBarLinks
-import matplotlib.pyplot as plt
 
-# Call the SideBarLinks from the nav module in the modules directory
+# Set page configuration for a wide layout
+st.set_page_config(page_title="Skill Marketplace", layout="wide")
+
+# Call the SideBarLinks from the nav module
 SideBarLinks()
 
-# Set the header with branding and user name
-st.title(f"Welcome to the Skill Marketplace, {st.session_state.get('first_name', 'User')}! 🚀")
-st.write("___")  # Separator for a cleaner UI
+# Header with branding and user name
+st.markdown(
+    f"<h1 style='text-align: center; color: #4CAF50;'>Welcome to the Skill Marketplace, {st.session_state.get('first_name', 'User')}! 🚀</h1>",
+    unsafe_allow_html=True
+)
+st.markdown("<hr>", unsafe_allow_html=True)  # Horizontal line separator
 
-# Add a motivational tagline
+# Motivational tagline
 st.markdown(
     """
-    **Discover in-demand technical skills, track your progress, and get closer to your dream career.**
-    """
+    <h3 style='text-align: center; color: #555555;'>
+    Discover in-demand technical skills, track your progress, and get closer to your dream career.
+    </h3>
+    """,
+    unsafe_allow_html=True
 )
 
 # Define the API URL
 API_URL = "http://api:4000/ts/all_skills"
 
-
 # Fetch skills from the API
+@st.cache_data
 def fetch_skills():
     try:
         response = requests.get(API_URL)
@@ -30,53 +39,92 @@ def fetch_skills():
         skills = response.json()
 
         # Validate the response data structure
-        if isinstance(skills, list) and len(skills) > 0 and isinstance(skills[0], list):
-            # If response is a list of lists, map it to a DataFrame
-            df = pd.DataFrame(skills, columns=["tech_skill_id", "skill_name", "complexity", "description"])
+        if isinstance(skills, list) and len(skills) > 0:
+            if isinstance(skills[0], list):
+                # If response is a list of lists, map it to a DataFrame
+                df = pd.DataFrame(skills, columns=["tech_skill_id", "skill_name", "complexity", "category", "popularity_score", "description"])
+            elif isinstance(skills[0], dict):
+                # If response is a list of dictionaries
+                df = pd.DataFrame(skills)
+            else:
+                st.warning("Unexpected data format from the API.")
+                return pd.DataFrame()  # Return an empty DataFrame in case of mismatch
             return df
-        elif isinstance(skills, list) and isinstance(skills[0], dict):
-            # If response is a list of dictionaries
-            return pd.DataFrame(skills)
         else:
-            st.warning("Unexpected data format from the API.")
-            return pd.DataFrame()  # Return an empty DataFrame in case of mismatch
+            st.warning("No skills data received from the API.")
+            return pd.DataFrame()
     except requests.exceptions.RequestException as e:
         st.error(f"Error fetching skills: {e}")
         return pd.DataFrame()
-
 
 # Fetch and display skills
 df = fetch_skills()
 
 if not df.empty:
-    # Display a summary of skills
+    # Skill Overview Section
     st.subheader("🛠️ Skill Overview")
     st.write(f"Total Skills Available: **{len(df)}**")
 
-    # Generate a bar chart showing skill categories (if applicable)
+    # Visualization: Skill Distribution by Complexity
     if "complexity" in df.columns:
-        skill_counts = df["complexity"].value_counts()
+        skill_counts = df["complexity"].value_counts().reset_index()
+        skill_counts.columns = ["Complexity Level", "Number of Skills"]
 
-        # Create a chart
-        fig, ax = plt.subplots(figsize=(8, 4))
-        skill_counts.plot(kind="bar", color=["#1f77b4", "#ff7f0e", "#2ca02c"], ax=ax)
-        ax.set_title("Skill Distribution by Complexity", fontsize=14, weight="bold")
-        ax.set_xlabel("Skill Level", fontsize=12)
-        ax.set_ylabel("Number of Skills", fontsize=12)
-        st.pyplot(fig)
+        # Create an interactive bar chart using Plotly
+        fig = px.bar(
+            skill_counts,
+            x="Complexity Level",
+            y="Number of Skills",
+            color="Complexity Level",
+            title="Skill Distribution by Complexity",
+            labels={"Complexity Level": "Complexity Level", "Number of Skills": "Number of Skills"},
+            color_discrete_map={
+                "Beginner": "#1f77b4",
+                "Intermediate": "#ff7f0e",
+                "Advanced": "#2ca02c"
+            }
+        )
+        fig.update_layout(
+            title_font_size=20,
+            xaxis_title="Complexity Level",
+            yaxis_title="Number of Skills",
+            bargap=0.2,
+            plot_bgcolor='rgba(0,0,0,0)',
+            paper_bgcolor='rgba(0,0,0,0)',
+            font=dict(color="#333333")
+        )
+        st.plotly_chart(fig, use_container_width=True)
     else:
         st.info("No complexity data available for visualization.")
 
-    # Display the skills in a styled table
+    # Full Skill List Section
     st.subheader("📋 Full Skill List")
+    # Configure DataFrame display
     st.dataframe(
-        df.style.format(precision=2).set_table_styles([
-            {"selector": "thead th", "props": [("font-size", "14px"), ("text-align", "center")]},
-            {"selector": "tbody td", "props": [("font-size", "12px"), ("padding", "10px")]}
-        ])
+        df,
+        use_container_width=True,
+        column_config={
+            "tech_skill_id": None,  # Hide this column
+            "skill_name": "Skill Name",
+            "complexity": st.column_config.Column(
+                "Complexity Level",
+                help="The difficulty level of the skill",
+                width="medium"
+            ),
+            "category": "Category",
+            "popularity_score": st.column_config.NumberColumn(
+                "Popularity Score",
+                format="%.2f",
+                help="Popularity score ranging from 0 to 100"
+            ),
+            "description": st.column_config.Column(
+                "Description",
+                width="large"
+            )
+        }
     )
 
-    # Add an export option for users
+    # Export option for users
     st.download_button(
         label="📥 Download Skill List as CSV",
         data=df.to_csv(index=False),
@@ -86,8 +134,8 @@ if not df.empty:
 else:
     st.warning("⚠️ No skills available. Check back later or contact support!")
 
-# Add footer branding
-st.write("___")
+# Footer branding
+st.markdown("<hr>", unsafe_allow_html=True)
 st.markdown(
     """
     <div style="text-align: center; color: #888888;">

@@ -27,7 +27,7 @@ def get_all_skills():
         connection = get_db_connection()
         with connection.cursor() as cursor:
             cursor.execute("""
-                SELECT tech_skill_id, skill_name, complexity, description
+                SELECT *
                             FROM TechSkills""")
             data = cursor.fetchall()
         return jsonify(data)
