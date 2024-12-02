@@ -2,7 +2,8 @@ from flask import Flask
 
 from backend.CsClasses.Academic_classes_routes import courses
 from backend.db_connection import db
-from backend.customers.customer_routes import customers
+from backend.Tech_Skills.Tech_Skill_routes import tech_skills
+from backend.Tech_Careers.Career_routes import careers
 from backend.products.products_routes import products
 from backend.simple.simple_routes import simple_routes
 import os
@@ -33,5 +34,7 @@ def create_app():
     app.register_blueprint(simple_routes)
     app.register_blueprint(products, url_prefix='/p')
     app.register_blueprint(courses, url_prefix='/c')
+    app.register_blueprint(tech_skills, url_prefix='/ts')
+    app.register_blueprint(careers, url_prefix='/careers')
 
     return app

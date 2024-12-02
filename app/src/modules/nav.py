@@ -13,18 +13,17 @@ def HomeNav():
 def AboutPageNav():
     st.sidebar.page_link("pages/30_About.py", label="About", icon="🧠")
 
+#--------------- Role of a job market enthusiast-------------
+def JobFanHomeNav():
+    st.sidebar.page_link("pages/00_jobmarket_home.py", label= "job market homepage", icon="🧠")
+def SkillsNav():
+    st.sidebar.page_link("pages/01_indemand_skills.py", label="view tech skills that the market needs", icon="🧠")
+def CareerNav():
+    st.sidebar.page_link("pages/02_InDemand_Careers.py", label="view cs careers that the market has in demand", icon="🧠")
 
 
 
-
-
-#### ------------------------ User one example test -----------------------------------------
-def AlgonautsUser1home():
-    st.sidebar.page_link("pages/01a_algonauts_user1_home.py", label="See what awaits you", icon=":)")
-
-
-
-#### ------------------------ Examples for Role of pol_strat_advisor ------------------------
+#### ------------------------ Role of pol_strat_advisor ------------------------
 def PolStratAdvHomeNav():
     st.sidebar.page_link(
         "pages/00_Pol_Strat_Home.py", label="Political Strategist Home", icon="👤"
@@ -58,7 +57,7 @@ def ClassificationNav():
     )
 
 
-# ------------------------ System Admin Role -----------------------------------------------
+#### ------------------------ System Admin Role ------------------------
 def AdminPageNav():
     st.sidebar.page_link("pages/20_Admin_Home.py", label="System Admin", icon="🖥️")
     st.sidebar.page_link(
@@ -86,6 +85,13 @@ def SideBarLinks(show_home=False):
 
     # Show the other page navigators depending on the users' role.
     if st.session_state["authenticated"]:
+        #show the page links if user is a job market enthusiast
+        if st.session_state["role"]== "Job Market Enthusiast":
+            JobFanHomeNav()
+            SkillsNav()
+            CareerNav()
+
+
 
         # Show World Bank Link and Map Demo Link if the user is a political strategy advisor role.
         if st.session_state["role"] == "pol_strat_advisor":

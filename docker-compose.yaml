@@ -20,6 +20,13 @@ services:
     volumes:
       - ./db:/docker-entrypoint-initdb.d         # Mount the ./db folder for initialization scripts
     restart: always                              # Ensure the service restarts automatically
+    healthcheck:
+      test: [ "CMD", "mysqladmin", "ping", "-h", "localhost" ]  # Check MySQL status
+      interval: 10s                              # Run the health check every 10 seconds
+      retries: 3                                 # Retry 3 times before considering the container as unhealthy
+      start_period: 5s                           # Wait 5 seconds before starting the health check
+      timeout: 5s                                # Timeout after 5 seconds if no response
+
 
 
   api:

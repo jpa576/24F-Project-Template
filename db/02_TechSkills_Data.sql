@@ -114,13 +114,10 @@ INSERT INTO TechSkills (skill_name, complexity, description) VALUES
     ('Encryption Methods', 'Advanced', 'Techniques for securing information.');
 
 
-
-
 -- CS 1100: Computer Science and Its Applications
 INSERT INTO CourseTechSkills (department, course_number, tech_skill_id) VALUES
 ('CS', '1100', 1),  -- Problem Solving
 ('CS', '1100', 2);  -- Software Tools Proficiency
-
 -- CS 1200: First Year Seminar
 INSERT INTO CourseTechSkills (department, course_number, tech_skill_id) VALUES
 ('CS', '1200', 3),  -- Academic Orientation
@@ -339,6 +336,7 @@ INSERT INTO CourseTechSkills (department, course_number, tech_skill_id) VALUES
 -- IS 4800: Empirical Research Methods
 INSERT INTO CourseTechSkills (department, course_number, tech_skill_id) VALUES
 ('IS', '4800', 73);  -- Empirical Research Methods
+
 
 
 

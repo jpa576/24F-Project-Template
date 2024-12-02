@@ -78,33 +78,17 @@ def get_courses_without_skills():
         current_app.logger.error(f"Error fetching courses without skills: {e}")
         return jsonify({"error": "An error occurred while fetching courses without skills."}), 500
 
-@courses.route('/course_info', methods=['GET'])
+@courses.route('/career paths', methods=['GET'])
 def course_info():
     try:
         connection = get_db_connection()
         with connection.cursor() as cursor:
             cursor.execute("""
                 SELECT
-                    ac.department AS course_department,
-                    ac.course_number AS course_number,
-                    ac.course_name AS course_name,
-                    cp.prerequisite_department AS prereq_department,
-                    cp.prerequisite_number AS prereq_number,
-                    ac_prereq.course_name AS prereq_name,
-                    cc.concentration_name AS concentration
+                    *
                 FROM
-                    AcademicCourses ac
-                LEFT JOIN
-                    CoursePrerequisites cp
-                    ON ac.department = cp.department AND ac.course_number = cp.course_number
-                LEFT JOIN
-                    AcademicCourses ac_prereq
-                    ON cp.prerequisite_department = ac_prereq.department AND cp.prerequisite_number = ac_prereq.course_number
-                LEFT JOIN
-                    ConcentrationCourses cc
-                    ON ac.department = cc.department AND ac.course_number = cc.course_number
-                ORDER BY
-                    cc.concentration_name, ac.department, ac.course_number;
+                    CareerPaths
+                ;
             """)
             data = cursor.fetchall()
             return jsonify(data)
