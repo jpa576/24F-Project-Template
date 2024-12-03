@@ -27,7 +27,7 @@ with col1:
     st.markdown("### 🏆 View Career Progress")
     st.write("Track your career development and see the skills you've mastered.")
     if st.button('Launch Career Progress Tracker', type='primary'):
-        st.switch_page('pages/11_Career_Progress.py')
+        st.switch_page('pages/11_career_progression.py')
 
 with col2:
     st.markdown("### 📚 View Academic Progress")

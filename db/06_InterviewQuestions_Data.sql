@@ -1,10 +1,11 @@
 -- Create the interview_questions table
 CREATE TABLE IF NOT EXISTS interview_questions (
-    id SERIAL PRIMARY KEY,
+    assessment_id int auto_increment PRIMARY KEY,
     question TEXT NOT NULL,
     skill VARCHAR(100) NOT NULL,
     difficulty VARCHAR(50) NOT NULL
 );
+
 
 -- Insert interview questions into the table
 INSERT INTO interview_questions (question, skill, difficulty) VALUES
