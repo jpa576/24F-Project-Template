@@ -54,10 +54,12 @@ CREATE TABLE AcademicCourses (
 
 -- Create Tech Skills Table
 CREATE TABLE TechSkills (
-  tech_skill_id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-  skill_name VARCHAR(100) UNIQUE NOT NULL,
-  complexity ENUM('Beginner', 'Intermediate', 'Advanced') NOT NULL,
-  description TEXT
+    tech_skill_id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    skill_name VARCHAR(100) UNIQUE NOT NULL,
+    complexity ENUM('Beginner', 'Intermediate', 'Advanced') NOT NULL,
+    category VARCHAR(50) DEFAULT 'General',
+    popularity_score DECIMAL(4, 2) DEFAULT 0.00,
+    description TEXT
 );
 
 
@@ -84,15 +86,18 @@ CREATE TABLE CoursePrerequisites (
 
 -- Create Career Paths Table
 CREATE TABLE CareerPaths (
-  career_path_id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-  career_name VARCHAR(100) NOT NULL,
-  description TEXT,
-  salary INT UNSIGNED
+  career_path_id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY, -- Unique ID for each career path
+  career_name VARCHAR(100) NOT NULL,                      -- Name of the career
+  description TEXT,                                       -- Detailed description of the career
+  salary INT UNSIGNED,                                    -- Expected average salary in USD
+  demand DECIMAL(2, 1)                                    -- Demand rating (e.g., 4.7 out of 5.0)
 );
+
 
 CREATE TABLE CareerPathSkills (
     career_path_id INT UNSIGNED NOT NULL,
     tech_skill_id INT UNSIGNED NOT NULL,
+    relevance DECIMAL (4,2),
     PRIMARY KEY (career_path_id, tech_skill_id),
     FOREIGN KEY (career_path_id) REFERENCES CareerPaths(career_path_id) ON DELETE CASCADE,
     FOREIGN KEY (tech_skill_id) REFERENCES TechSkills(tech_skill_id) ON DELETE CASCADE
@@ -151,22 +156,13 @@ CREATE TABLE ConcentrationCourses (
     FOREIGN KEY (department, course_number) REFERENCES AcademicCourses(department, course_number) ON DELETE CASCADE
 );
 
-CREATE TABLE AcademicPlans (
-    plan_id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-    plan_name VARCHAR(255) NOT NULL,
-    concentration_id INT UNSIGNED NOT NULL,
-    description TEXT,
-    FOREIGN KEY (concentration_id) REFERENCES AcademicConcentrations(concentration_id) ON DELETE CASCADE
-);
-
 -- Create Users Table
 CREATE TABLE Users (
   user_id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
   name VARCHAR(100) NOT NULL,
   email VARCHAR(100) UNIQUE NOT NULL,
   year INT DEFAULT 0,
-  plan_id INT UNSIGNED,
-  FOREIGN KEY (plan_id) REFERENCES AcademicPlans(plan_id) ON DELETE SET NULL
+  plan_id INT UNSIGNED
 );
 
 CREATE TABLE UserCodingSubmissions (

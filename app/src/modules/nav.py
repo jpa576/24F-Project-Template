@@ -15,11 +15,13 @@ def AboutPageNav():
 
 #--------------- Role of a job market enthusiast-------------
 def JobFanHomeNav():
-    st.sidebar.page_link("pages/00_jobmarket_home.py", label= "job market homepage", icon="🧠")
+    st.sidebar.page_link("pages/00_jobmarket_home.py", label= "job market homepage", icon="🏠")
 def SkillsNav():
-    st.sidebar.page_link("pages/01_indemand_skills.py", label="view tech skills that the market needs", icon="🧠")
+    st.sidebar.page_link("pages/01_indemand_skills.py", label="View Skills in Demand", icon="📊")
 def CareerNav():
-    st.sidebar.page_link("pages/02_InDemand_Careers.py", label="view cs careers that the market has in demand", icon="🧠")
+    st.sidebar.page_link("pages/02_InDemand_Careers.py", label="Explore Roles & Salaries", icon="🔍")
+def CareerSkillNav():
+    st.sidebar.page_link("pages/03_career_skills.py", label="Explore Careers and their Required Skills", icon="🌍")
 
 
 
@@ -90,6 +92,7 @@ def SideBarLinks(show_home=False):
             JobFanHomeNav()
             SkillsNav()
             CareerNav()
+            CareerSkillNav()
 
 
 

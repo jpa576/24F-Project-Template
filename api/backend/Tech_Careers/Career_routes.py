@@ -33,7 +33,7 @@ def get_all_careers():
         current_app.logger.error(f"Error fetching all career paths: {e}")
         return jsonify({"error": "An error occurred while fetching careers."}), 500
 
-@careers.route('/career_skills', methods=['GET'])
+@careers.route('/career_skills1', methods=['GET'])
 def get_career_skills():
     try:
         connection = get_db_connection()
@@ -50,6 +50,24 @@ def get_career_skills():
             data = cursor.fetchall()
         return jsonify(data)
     except Exception as e:
-        current_app.logger.error(f"Error fetching concentration courses: {e}")
-        return jsonify({"error": "An error occurred while fetching concentration courses."}), 500
+        current_app.logger.error(f"Error fetching data: {e}")
+        return jsonify({"error": "An error occurred while fetching data."}), 500
 
+@careers.route('/career_skills2', methods=['GET'])
+def get_career_noskills():
+    try:
+        connection = get_db_connection()
+        with connection.cursor() as cursor:
+            cursor.execute("""
+        SELECT ts.skill_name, ts.complexity, ts.category, ts.popularity_score, ts.description
+        FROM CareerPaths cp
+        JOIN CareerPathSkills cps ON cp.career_path_id = cps.career_path_id
+        JOIN TechSkills ts ON cps.tech_skill_id = ts.tech_skill_id
+        WHERE cp.career_name = %s
+    """
+            )
+            data = cursor.fetchall()
+        return jsonify(data)
+    except Exception as e:
+        current_app.logger.error(f"Error fetching careers without skills: {e}")
+        return jsonify({"error": "An error occurred while fetching careers without skills."}), 500
