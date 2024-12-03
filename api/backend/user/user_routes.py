@@ -57,7 +57,6 @@ def get_progress():
         with connection.cursor() as cursor:
             cursor.execute("""
                 SELECT 
-    u.name AS user_name, 
     c.career_name, 
     ucp.progress_percentage
 FROM 

@@ -1,5 +1,7 @@
 import logging
 import streamlit as st
+import requests
+import pandas as pd
 from modules.nav import SideBarLinks
 
 # Configure logger
@@ -21,6 +23,21 @@ st.write("### Track your progress and uncover opportunities tailored to your goa
 # Divider for clarity
 st.markdown("---")
 
+# Function to fetch career progress data
+def fetch_career_progress():
+    api_url = "http://api:4000/u/get_progress"
+    try:
+        with st.spinner("Fetching career progress data..."):
+            response = requests.get(api_url, timeout=10)  # 10-second timeout
+            response.raise_for_status()
+            return response.json()
+    except requests.exceptions.RequestException as e:
+        st.error(f"⚠️ Unable to fetch progress data: {e}")
+        return []
+
+# Fetch progress data
+progress_data = fetch_career_progress()
+
 # Main layout: Career Progress and Insights
 col1, col2 = st.columns([1, 1])
 
@@ -30,8 +47,18 @@ with col1:
     Visualize your journey to success. Track mastered skills, progress milestones, 
     and future steps for achieving your career goals.
     """)
-    st.empty()  # Placeholder for future dynamic career progress charts
-    st.info("🚧 **Career Progress Visuals Coming Soon!**", icon="🚀")
+
+    # Display career progress
+    if progress_data:
+        # Use appropriate column headers for the API data
+        df = pd.DataFrame(progress_data, columns=["Career Path", "Progress Percentage"])
+        st.markdown("### 📈 Progress Overview")
+        st.dataframe(df.style.set_table_styles([
+            {"selector": "thead th", "props": [("background-color", "#4CAF50"), ("color", "white")]},
+            {"selector": "tbody tr:nth-child(even)", "props": [("background-color", "#f2f2f2")]}
+        ]), use_container_width=True)
+    else:
+        st.info("🚧 **No progress data available. Start your career journey today!**", icon="🚀")
 
 with col2:
     st.markdown("## 🎯 Insights for Your Career Path")
@@ -63,8 +90,9 @@ with col3:
         st.success("Redirecting to Career Goals Update Page... (Integration Pending)", icon="✅")
 
 with col4:
-    if st.button('📈 View Skill Recommendations', use_container_width=True):
-        st.success("Redirecting to Skill Recommendations Page... (Integration Pending)", icon="📈")
+    if st.button('📈 Practice relevant skills', use_container_width=True):
+        st.success("Redirecting to Skill Recommendations Page...", icon="📈")
+        st.switch_page('pages/12_python_coding.py')
 
 # Footer for branding and navigation
 st.markdown("---")
