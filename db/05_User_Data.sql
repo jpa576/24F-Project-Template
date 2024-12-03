@@ -1,25 +1,19 @@
-use algonauts_db;
+-- Insert user into Users table
+INSERT INTO Users (name, email, year, plan_id)
+VALUES ('Marcus', 'mca007@example.com', 2, NULL);
 
--- Insert User Data
-INSERT INTO Users (user_id, name, email, year, plan_id) VALUES
-(1, 'Jack Smith', 'jack.smith@example.com', 2024, 1),
-(2, 'Mark Johnson', 'mark.johnson@example.com', 2024, 2);
+-- Assuming "Marcus" is assigned user_id 1, and using sample data for other tables
 
--- Insert User Course Progress
-INSERT INTO UserCourseProgress (progress_id, user_id, department, course_number, progress_status) VALUES
-(1, 1, 'CS', '5001', 'completed'),
-(2, 1, 'CS', '5010', 'in-progress'),
-(3, 2, 'CS', '4500', 'completed'),
-(4, 2, 'CS', '4800', 'in-progress');
 
--- Insert User Skills
-INSERT INTO UserSkills (user_skill_id, user_id, tech_skill_id, acquired_date) VALUES
-(1, 1, 1, '2023-09-01'),
-(2, 1, 2, '2023-10-01'),
-(3, 2, 3, '2023-09-15'),
-(4, 2, 4, '2023-10-10');
+-- Insert skills acquired by "Marcus"
+INSERT INTO UserSkills (user_id, tech_skill_id, acquired_date)
+VALUES
+(1, 1, '2023-01-15'), -- Assuming tech_skill_id 1 is Python
+(1, 3, '2023-05-20'), -- Assuming tech_skill_id 3 is Algorithmic Thinking
+(1, 6, '2023-08-10'); -- Assuming tech_skill_id 6 is Data Analysis
 
--- Insert User Career Progress
-INSERT INTO UserCareerProgress (progress_id, user_id, career_path_id, progress_percentage) VALUES
-(1, 1, 1, 50.00),
-(2, 2, 2, 75.00);
+-- Insert career progress for "Marcus"
+INSERT INTO UserCareerProgress (user_id, career_path_id, progress_percentage)
+VALUES
+(1, 1, 45.00), -- Assuming career_path_id 1 is Software Engineer
+(1, 2, 25.00); -- Assuming career_path_id 2 is Data Scientist
