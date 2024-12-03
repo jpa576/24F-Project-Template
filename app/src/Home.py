@@ -57,13 +57,13 @@ if st.button("Jack the Job Market Enthusiast",
     logger.info("Logging in as jack- job market enthusiast")
     st.switch_page('pages/00_jobmarket_home.py')
 
-if st.button('Act as Mohammad, an USAID worker', 
-            type = 'primary', 
-            use_container_width=True):
+if st.button("Act as Mark, a CS Student",
+             type='primary',
+             use_container_width=True):
     st.session_state['authenticated'] = True
-    st.session_state['role'] = 'usaid_worker'
-    st.session_state['first_name'] = 'Mohammad'
-    st.switch_page('pages/10_USAID_Worker_Home.py')
+    st.session_state['role'] = 'CS_Student'
+    st.session_state['first_name'] = 'Mark'
+    st.switch_page('pages/10_MarkAcademicHome.py')
 
 if st.button('Act as System Administrator', 
             type = 'primary', 

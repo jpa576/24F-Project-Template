@@ -1,3 +1,6 @@
+use algonauts_db;
+
+
 -- Create the interview_questions table
 CREATE TABLE IF NOT EXISTS interview_questions (
     id SERIAL PRIMARY KEY,
