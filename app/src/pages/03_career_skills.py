@@ -56,11 +56,23 @@ if career_skills:
         ]
     ))
 
-    # Add a text input to filter by skill
+    # Add a text input with auto-completion to filter by skill
     st.markdown("### 🔍 Search Careers by Skill")
-    search_skill = st.text_input("Type a Skill to See Associated Careers")
+    all_skills = sorted(df['Skill'].unique())  # Get all unique skills
+    search_skill = st.text_input(
+        "Type a Skill to See Associated Careers (Auto-Complete Enabled)",
+        placeholder="Start typing a skill...",
+        help="Search for skills like 'Python', 'Machine Learning', etc."
+    )
 
-    if search_skill.strip():  # Ensure non-empty input
+    # Show a dropdown with suggestions as users type
+    if search_skill:
+        suggestions = [skill for skill in all_skills if search_skill.lower() in skill.lower()]
+        if suggestions:
+            st.markdown("### 🔍 Suggestions:")
+            st.write(", ".join(suggestions))
+
+        # Filter by the entered skill
         filtered_df_skill = df[df['Skill'].str.contains(search_skill, case=False, na=False)]
         if not filtered_df_skill.empty:
             st.markdown("### 📋 Careers Associated with the Skill")
