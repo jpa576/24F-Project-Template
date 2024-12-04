@@ -1,121 +1,112 @@
-import logging
-import streamlit as st
 import requests
+import streamlit as st
 import pandas as pd
-import plotly.express as px
 from modules.nav import SideBarLinks
 
-# Configure logger
-logger = logging.getLogger(__name__)
-
-# Set page configuration for a wide layout
-st.set_page_config(page_title="Career Progress Dashboard", layout="wide")
-
-# Call the SideBarLinks from the nav module
+# Call the SideBarLinks from the nav module in the modules directory
 SideBarLinks()
 
-# Header with branding and username
-st.markdown(
-    f"<h1 style='text-align: center; color: #4CAF50;'>Welcome to the Career Progress Dashboard, {st.session_state.get('first_name', 'User')}! 🚀</h1>",
-    unsafe_allow_html=True
-)
-st.markdown("<hr>", unsafe_allow_html=True)  # Horizontal line separator
+# Set the header of the page
+st.header('In-Demand Skills')
 
-# Motivational tagline
-st.markdown(
-    """
-    <h3 style='text-align: center; color: #555555;'>
-    Track your progress and uncover opportunities tailored to your dream career.
-    </h3>
-    """,
-    unsafe_allow_html=True
-)
+# Access the session state to make a more customized/personalized app experience
+if "first_name" in st.session_state:
+    st.write(f"### Hi, {st.session_state['first_name']}.")
+else:
+    st.warning("Please log in to personalize your experience.")
 
-# Define the API URL for career progress
-API_URL = "http://api:4000/u/get_progress"
+# API URL
+API_URL = "http://api:4000/ts/skills/by_demand"
 
-# Fetch career progress data from the API
-@st.cache_data
-def fetch_career_progress():
+# Fetch skills from the API
+def fetch_skills():
     try:
         response = requests.get(API_URL)
         response.raise_for_status()  # Raise an error for bad status codes
-        progress_data = response.json()
-        if isinstance(progress_data, list) and len(progress_data) > 0:
-            return pd.DataFrame(progress_data, columns=["Career Path", "Progress Percentage"])
+        skills = response.json()
+
+        # Validate the response data structure
+        if isinstance(skills, list) and len(skills) > 0:
+            if isinstance(skills[0], dict):
+                # If response is a list of dictionaries
+                df = pd.DataFrame(skills)
+            elif isinstance(skills[0], list):
+                # If response is a list of lists, map it to a DataFrame
+                df = pd.DataFrame(skills, columns=["skill_name", "complexity", "description", "popularity_score"])
+            else:
+                st.warning("Unexpected data format from the API.")
+                return pd.DataFrame()  # Return an empty DataFrame in case of mismatch
         else:
-            st.warning("No career progress data received from the API.")
+            st.warning("No data received from the API.")
             return pd.DataFrame()
+
+        return df
     except requests.exceptions.RequestException as e:
-        st.error(f"Error fetching career progress: {e}")
+        st.error(f"Error fetching skills: {e}")
         return pd.DataFrame()
 
-# Fetch and display career progress
-df = fetch_career_progress()
+# Fetch skills from the API
+skills_df = fetch_skills()
 
-if not df.empty:
-    # Career Progress Overview Section
-    st.subheader("📊 Career Progress Overview")
-    st.write(f"Tracking progress for **{len(df)} career paths**. Stay on track to achieve your goals!")
+# Display the skills
+if not skills_df.empty:
+    st.write("### Top 10 In-Demand Skills")
 
-    # Visualization: Career Progress Distribution
-    st.markdown("### 📈 Progress Distribution Across Career Paths")
-    if "Progress Percentage" in df.columns:
-        fig = px.bar(
-            df,
-            x="Career Path",
-            y="Progress Percentage",
-            title="Career Progress by Path",
-            labels={"Career Path": "Career Path", "Progress Percentage": "Progress (%)"},
-            text="Progress Percentage",
-            color="Career Path",
-            color_discrete_sequence=px.colors.qualitative.Set3
-        )
-        fig.update_layout(
-            title_font_size=20,
-            xaxis_title="Career Path",
-            yaxis_title="Progress (%)",
-            bargap=0.2,
-            plot_bgcolor='rgba(0,0,0,0)',
-            paper_bgcolor='rgba(0,0,0,0)',
-            font=dict(color="#333333")
-        )
-        st.plotly_chart(fig, use_container_width=True)
-    else:
-        st.info("No progress data available for visualization.")
+    # Map columns manually
+    column_mapping = {
+        'skill_name': 'Skill Name',
+        'complexity': 'Complexity',
+        'description': 'Description',
+        'popularity_score': 'Popularity Score'
+    }
+    skills_df = skills_df.rename(columns=column_mapping)
 
-    # Career Progress Table
-    st.subheader("📋 Detailed Career Progress")
-    st.dataframe(
-        df,
-        use_container_width=True,
-        column_config={
-            "Career Path": st.column_config.Column("Career Path", width="medium"),
-            "Progress Percentage": st.column_config.NumberColumn(
-                "Progress (%)",
-                format="%.2f",
-                help="Percentage of progress completed for each career path"
-            )
-        }
-    )
+    # Ensure popularity_score is numeric and sort by it (highest first)
+    if 'Popularity Score' in skills_df.columns:
+        skills_df['Popularity Score'] = pd.to_numeric(skills_df['Popularity Score'], errors='coerce')  # Convert to numeric
+        skills_df = skills_df.sort_values(by='Popularity Score', ascending=False)
 
-    # Export option for users
-    st.download_button(
-        label="📥 Download Career Progress as CSV",
-        data=df.to_csv(index=False),
-        file_name="career_progress.csv",
-        mime="text/csv"
-    )
+    # Top 10 entries
+    top_10_skills = skills_df.head(10).reset_index(drop=True)
+
+    # Initialize session state index
+    if 'current_index' not in st.session_state:
+        st.session_state.current_index = 0
+
+    # Navigation logic
+    def next_item():
+        if st.session_state.current_index < len(top_10_skills) - 1:
+            st.session_state.current_index += 1
+
+    def prev_item():
+        if st.session_state.current_index > 0:
+            st.session_state.current_index -= 1
+
+    # Layout: Horizontal navigation with arrows
+    col1, col2, col3 = st.columns([1, 8, 1])
+
+    with col1:
+        if st.button("⬅️", key="prev"):
+            prev_item()
+
+    with col2:
+        # Current Skill Data
+        current_skill = top_10_skills.iloc[st.session_state.current_index]
+
+        # Display Rank and Skill Information
+        rank = st.session_state.current_index + 1  # Rank from 1 to 10
+        st.markdown(f"<h1 style='font-size: 72px; text-align: center;'>#{rank}</h1>", unsafe_allow_html=True)
+        st.write(f"**{current_skill['Skill Name']}**")
+        st.write(f"*{current_skill['Description']}*")
+        st.write(f"⚡ **Complexity**: {current_skill['Complexity']}")
+        st.write(f"🔥 **Popularity Score**: {current_skill['Popularity Score']}")
+
+    with col3:
+        if st.button("➡️", key="next"):
+            next_item()
+
+    # Show the complete DataFrame below for reference
+    st.write("### All Skills Ranked by Demand")
+    st.dataframe(skills_df)
 else:
-    st.warning("⚠️ No career progress available. Start tracking your progress today!")
-
-# Footer branding
-st.markdown("<hr>", unsafe_allow_html=True)
-st.markdown(
-    """
-    <div style="text-align: center; color: #888888;">
-        <small>Powered by <b>Algonauts</b> | Empowering Your Career Progress 🌟</small>
-    </div>
-    """,
-    unsafe_allow_html=True
-)
+    st.warning("No skills available.")
