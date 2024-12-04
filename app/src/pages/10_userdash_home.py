@@ -23,17 +23,21 @@ st.markdown("---")
 # Layout for the action buttons
 col1, col2 = st.columns(2)
 
+# Career Progress Button
 with col1:
     st.markdown("### 🏆 View Career Progress")
     st.write("Track your career development and see the skills you've mastered.")
     if st.button('Launch Career Progress Tracker', type='primary'):
-        st.switch_page('pages/11_career_progression.py')
+        # Correct file name/path for Career Progression Page
+        st.switch_page('11_career_progression')
 
+# Academic Progress Button
 with col2:
     st.markdown("### 📚 View Academic Progress")
     st.write("Monitor your academic growth and assess your learning journey.")
     if st.button('Launch Academic Progress Tracker', type='primary'):
-        st.switch_page('pages/12_Academic_Progress.py')
+        # Correct file name/path for Academic Progression Page
+        st.switch_page('12_Academic_Progress')
 
 # Add an interactive section for user guidance
 st.markdown("---")
@@ -93,8 +97,3 @@ st.markdown("""
     Built with ❤️ using Streamlit | [Privacy Policy](#) | [Terms of Use](#)
 </small>
 """, unsafe_allow_html=True)
-
-
-
-
-
