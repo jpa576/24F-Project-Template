@@ -1,55 +1,68 @@
+import logging
 import streamlit as st
 import requests
 
+# Configure logger
+logger = logging.getLogger(__name__)
+
 # Set page configuration
-st.set_page_config(page_title="Coding Problems", layout="wide")
+st.set_page_config(page_title="Coding Challenges", layout="wide")
 
-# Page header
-st.markdown("# 🧩 Interactive Coding Problems")
-st.markdown("### Choose a problem to solve and boost your skills!")
+# Page Header
+st.markdown(
+    """
+    # 🧑‍💻 Explore Coding Challenges
+    ### Choose a problem to solve and enhance your skills with real-time feedback.
+    """
+)
 
+# Divider for clarity
+st.markdown("---")
 
-# Function to fetch coding problems
-def fetch_coding_problems():
+# Function to fetch coding assessments
+def fetch_coding_assessments():
     api_url = "http://api:4000/ass/all_assessments"
     try:
-        with st.spinner("Fetching coding problems..."):
-            response = requests.get(api_url, timeout=10)  # 10-second timeout
+        with st.spinner("Fetching coding challenges..."):
+            response = requests.get(api_url, timeout=10)
             response.raise_for_status()
-            data = response.json()
-            if "data" in data:
-                return data["data"]
-            else:
-                st.error("Unexpected API response format.")
-                return []
+            data = response.json()  # Assume API returns a list
+            return data  # Directly return the list of problems
     except requests.exceptions.RequestException as e:
-        st.error(f"⚠️ Unable to fetch coding problems: {e}")
+        st.error(f"⚠️ Unable to fetch coding challenges: {e}")
         return []
 
+# Fetch coding assessments
+coding_problems = fetch_coding_assessments()
 
-# Fetch coding problems
-problems = fetch_coding_problems()
+# Display coding problems dynamically
+if coding_problems:
+    st.markdown("## 🛠️ Available Coding Challenges")
+    for problem in coding_problems:
+        # Extract problem details
+        assessment_id = problem.get("assessment_id")
+        problem_title = problem.get("problem_statement", "Untitled Problem")
 
-# Display problems as buttons
-if problems:
-    st.markdown("### 📝 Available Coding Problems")
-    for problem in problems:
-        problem_id = problem.get("assessment_id", "Unknown ID")
-        problem_statement = problem.get("problem_statement", "No description available")
+        # Display as an interactive button
+        if st.button(problem_title, key=f"problem_{assessment_id}"):
+            # Store problem details in session state for the IDE page
+            st.session_state["selected_problem_id"] = assessment_id
+            st.session_state["selected_problem_title"] = problem_title
+            st.session_state["selected_input_example"] = problem.get("input_example")
+            st.session_state["selected_expected_output"] = problem.get("expected_output")
 
-        # Display each problem as a button
-        if st.button(problem_statement, key=f"problem_{problem_id}"):
-            # Redirect to the IDE page with the selected problem ID as a query parameter
-            st.experimental_set_query_params(problem_id=problem_id)
-            st.success(f"Redirecting to the IDE for Problem ID: {problem_id}")
-            st.experimental_rerun()
+            # Redirect to the IDE page
+            st.switch_page("pages/12_python_coding.py")
 else:
-    st.info("🚧 **No coding problems available at the moment. Please check back later!**", icon="🛠️")
+    st.info("🚧 No coding challenges available. Please check back later.", icon="⚙️")
 
 # Footer for branding
 st.markdown("---")
-st.markdown("""
-<small>
-    Built with ❤️ using Streamlit | [Privacy Policy](#) | [Terms of Use](#)
-</small>
-""", unsafe_allow_html=True)
+st.markdown(
+    """
+    <small>
+    Powered by <b>Algonauts</b> | [Privacy Policy](#) | [Terms of Use](#)
+    </small>
+    """,
+    unsafe_allow_html=True,
+)
