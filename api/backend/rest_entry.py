@@ -7,6 +7,8 @@ from backend.Tech_Careers.Career_routes import careers
 from backend.products.products_routes import products
 from backend.simple.simple_routes import simple_routes
 from backend.user.user_routes import user
+from backend.Coding.Assessments_routes import Assessments
+
 import os
 from dotenv import load_dotenv
 
@@ -38,4 +40,6 @@ def create_app():
     app.register_blueprint(tech_skills, url_prefix='/ts')
     app.register_blueprint(careers, url_prefix='/careers')
     app.register_blueprint(user, url_prefix='/u')
+    app.register_blueprint(Assessments, url_prefix='/ass')
+
     return app

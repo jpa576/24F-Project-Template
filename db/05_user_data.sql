@@ -17,9 +17,3 @@ INSERT INTO UserCareerProgress (user_id, career_path_id, progress_percentage)
 VALUES
 (1, 1, 45.00), -- Assuming career_path_id 1 is Software Engineer
 (1, 2, 25.00); -- Assuming career_path_id 2 is Data Scientist
-
-
-
-
-
-

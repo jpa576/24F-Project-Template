@@ -1079,3 +1079,4 @@ SELECT
     (SELECT career_path_id FROM CareerPaths WHERE career_name = 'Video Production Engineer'),
     (SELECT tech_skill_id FROM TechSkills WHERE skill_name = 'Creative Writing Basics'),
     85.00;
+

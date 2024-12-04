@@ -87,3 +87,25 @@ INSERT INTO InterviewQuestions (question, skill, difficulty) VALUES
 ('What are the differences between static and dynamic linking?', 'Operating Systems', 'Medium'),
 ('How would you detect and resolve deadlocks in a system?', 'Concurrency', 'Hard');
 
+describe CodingAssessments;
+INSERT INTO CodingAssessments (skill_id, problem_statement, input_example, expected_output) VALUES
+-- Python
+((SELECT tech_skill_id FROM TechSkills WHERE skill_name = 'Python'),
+ 'Write a function to calculate the factorial of a number using recursion.',
+ 'Input: 5',
+ 'Output: 120'),
+
+((SELECT tech_skill_id FROM TechSkills WHERE skill_name = 'Python'),
+ 'Write a Python function to check if a string is a palindrome.',
+ 'Input: "radar"',
+ 'Output: True'),
+
+((SELECT tech_skill_id FROM TechSkills WHERE skill_name = 'Python'),
+ 'Write a Python script to generate the first n Fibonacci numbers.',
+ 'Input: 7',
+ 'Output: [0, 1, 1, 2, 3, 5, 8]'),
+
+((SELECT tech_skill_id FROM TechSkills WHERE skill_name = 'Python'),
+ 'Write a Python function to find the maximum value in a list.',
+ 'Input: [4, 2, 9, 7]',
+ 'Output: 9');
