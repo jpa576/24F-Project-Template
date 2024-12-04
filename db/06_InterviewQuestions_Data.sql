@@ -1,17 +1,8 @@
 use algonauts_db;
 
 
--- Create the interview_questions table
-CREATE TABLE IF NOT EXISTS interview_questions (
-    assessment_id int auto_increment PRIMARY KEY,
-    question TEXT NOT NULL,
-    skill VARCHAR(100) NOT NULL,
-    difficulty VARCHAR(50) NOT NULL
-);
-
-
 -- Insert interview questions into the table
-INSERT INTO interview_questions (question, skill, difficulty) VALUES
+INSERT INTO InterviewQuestions (question, skill, difficulty) VALUES
 ('What is the difference between a process and a thread?', 'Operating Systems', 'Medium'),
 ('Explain how a hash table works.', 'Data Structures', 'Medium'),
 ('What is the time complexity of quicksort?', 'Algorithms', 'Medium'),
