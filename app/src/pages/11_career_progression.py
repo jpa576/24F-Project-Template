@@ -2,6 +2,7 @@ import logging
 import streamlit as st
 import requests
 import pandas as pd
+import plotly.express as px
 from modules.nav import SideBarLinks
 
 # Configure logger
@@ -23,17 +24,20 @@ st.write("### Track your progress and uncover opportunities tailored to your goa
 # Divider for clarity
 st.markdown("---")
 
+
 # Function to fetch career progress data
 def fetch_career_progress():
-    api_url = "http://api:4000/u/1/get_progress"
+    api_url = "http://api:4000/u/1/progress"
     try:
         with st.spinner("Fetching career progress data..."):
             response = requests.get(api_url, timeout=10)  # 10-second timeout
             response.raise_for_status()
-            return response.json()
+            response_data = response.json()
+            return response_data.get("data", [])  # Extract the 'data' key
     except requests.exceptions.RequestException as e:
         st.error(f"⚠️ Unable to fetch progress data: {e}")
         return []
+
 
 # Fetch progress data
 progress_data = fetch_career_progress()
@@ -48,15 +52,31 @@ with col1:
     and future steps for achieving your career goals.
     """)
 
-    # Display career progress
     if progress_data:
-        # Use appropriate column headers for the API data
-        df = pd.DataFrame(progress_data, columns=["Career Path", "Progress Percentage"])
+        # Create a DataFrame from the extracted 'data' list
+        df = pd.DataFrame(progress_data)
+
+        # Cleanly format the DataFrame for display
         st.markdown("### 📈 Progress Overview")
-        st.dataframe(df.style.set_table_styles([
-            {"selector": "thead th", "props": [("background-color", "#4CAF50"), ("color", "white")]},
-            {"selector": "tbody tr:nth-child(even)", "props": [("background-color", "#f2f2f2")]}
-        ]), use_container_width=True)
+        st.table(df.rename(columns={"career_name": "Career Name", "progress_percentage": "Progress (%)"}))
+
+        # Optional: Visualize Progress
+        fig = px.bar(
+            df,
+            x="career_name",
+            y="progress_percentage",
+            color="career_name",
+            title="Career Progress by Percentage",
+            labels={"career_name": "Career Name", "progress_percentage": "Progress (%)"},
+            height=400
+        )
+        fig.update_layout(
+            showlegend=False,
+            xaxis_title="Career Path",
+            yaxis_title="Progress Percentage",
+            font=dict(size=14)
+        )
+        st.plotly_chart(fig, use_container_width=True)
     else:
         st.info("🚧 **No progress data available. Start your career journey today!**", icon="🚀")
 

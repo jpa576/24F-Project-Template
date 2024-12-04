@@ -25,12 +25,12 @@ def close_db_connection(exception):
         db.close()
 
 # Route to get user info by user_id
-@user.route('/user/<int:user_id>/info', methods=['GET'])
+@user.route('/<int:user_id>/info', methods=['GET'])
 def get_user_info(user_id):
     try:
         connection = get_db_connection()
         with connection.cursor(pymysql.cursors.DictCursor) as cursor:
-            cursor.execute("SELECT * FROM Users WHERE user_id = %s", (user_id,))
+            cursor.execute("SELECT user_id, name, email, year, plan_id FROM Users WHERE user_id = %s", (user_id,))
             data = cursor.fetchone()
         if not data:
             return jsonify({"error": "User not found."}), 404
@@ -40,7 +40,7 @@ def get_user_info(user_id):
         return jsonify({"error": "An error occurred while fetching user info."}), 500
 
 # Route to get user skills by user_id
-@user.route('/user/<int:user_id>/skills', methods=['GET'])
+@user.route('/<int:user_id>/skills', methods=['GET'])
 def get_user_skills(user_id):
     try:
         connection = get_db_connection()
@@ -58,7 +58,7 @@ def get_user_skills(user_id):
         return jsonify({"error": "An error occurred while fetching user skills."}), 500
 
 # Route to get user career progress by user_id
-@user.route('/user/<int:user_id>/progress', methods=['GET'])
+@user.route('/<int:user_id>/progress', methods=['GET'])
 def get_user_progress(user_id):
     try:
         connection = get_db_connection()
@@ -81,7 +81,7 @@ def get_user_progress(user_id):
         return jsonify({"error": "An error occurred while fetching user progress."}), 500
 
 # Route to get user careers by user_id
-@user.route('/user/<int:user_id>/careers', methods=['GET'])
+@user.route('/<int:user_id>/careers', methods=['GET'])
 def get_user_careers(user_id):
     try:
         connection = get_db_connection()
