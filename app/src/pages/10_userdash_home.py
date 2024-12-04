@@ -29,7 +29,7 @@ with col1:
     st.write("Track your career development and see the skills you've mastered.")
     if st.button('Launch Career Progress Tracker', type='primary'):
         # Correct file name/path for Career Progression Page
-        st.switch_page('11_career_progression')
+        st.switch_page('pages/11_career_progression.py')
 
 # Academic Progress Button
 with col2:
@@ -37,7 +37,7 @@ with col2:
     st.write("Monitor your academic growth and assess your learning journey.")
     if st.button('Launch Academic Progress Tracker', type='primary'):
         # Correct file name/path for Academic Progression Page
-        st.switch_page('12_Academic_Progress')
+        st.switch_page('pages/13_Academic_Progress.py')
 
 # Add an interactive section for user guidance
 st.markdown("---")

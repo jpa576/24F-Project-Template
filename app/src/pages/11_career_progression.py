@@ -108,6 +108,7 @@ col3, col4 = st.columns([1, 1])
 with col3:
     if st.button('📝 Update Career Goals', use_container_width=True):
         st.success("Redirecting to Career Goals Update Page... (Integration Pending)", icon="✅")
+        st.switch_page('pages/14_CareerUpdate.py')
 
 with col4:
     if st.button('📈 Practice relevant skills', use_container_width=True):

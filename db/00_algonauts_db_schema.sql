@@ -180,13 +180,13 @@ CREATE TABLE UserCodingSubmissions (
     FOREIGN KEY (career_path_id) REFERENCES CareerPaths(career_path_id)
         );
 
--- Create User Course Progress Table
 CREATE TABLE UserCourseProgress (
-  progress_id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-  user_id INT UNSIGNED NOT NULL,
-  department VARCHAR(10) NOT NULL,
-  course_number VARCHAR(10) NOT NULL,
-  progress_status VARCHAR(20) DEFAULT 'in-progress',
+  progress_id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY, -- Unique identifier for the record
+  user_id INT UNSIGNED NOT NULL,                      -- Reference to the Users table
+  department VARCHAR(10) NOT NULL,                    -- Department of the course (e.g., CS, DS)
+  course_number VARCHAR(10) NOT NULL,                 -- Course number (e.g., 2500, 4400)
+  progress_status ENUM('in-progress', 'completed', 'not-started') DEFAULT 'in-progress', -- Default is 'in-progress'
+
   FOREIGN KEY (user_id) REFERENCES Users(user_id) ON DELETE CASCADE,
   FOREIGN KEY (department, course_number) REFERENCES AcademicCourses(department, course_number) ON DELETE CASCADE
 );
