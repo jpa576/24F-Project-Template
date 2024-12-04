@@ -43,17 +43,48 @@ st.write("Choose from the following options to enhance your experience:")
 # Columns for additional resources or actions
 col3, col4 = st.columns(2)
 
+# Useful Links
 with col3:
     st.markdown("### 🔗 Useful Links")
-    st.write("- [Explore Career Resources](#)")
-    st.write("- [Skill Development Tools](#)")
-    st.write("- [Professional Networking Tips](#)")
+    st.markdown(
+        '<a href="https://careers.northeastern.edu" target="_blank" style="text-decoration:none;">'
+        '<button style="background-color:#4CAF50; color:white; border:none; padding:10px 20px; '
+        'text-align:center; text-decoration:none; display:inline-block; font-size:16px; margin:4px 2px; '
+        'cursor:pointer; border-radius:4px;">Explore Career Resources</button></a>',
+        unsafe_allow_html=True
+    )
+    st.markdown(
+        '<a href="https://www.kaggle.com/learn" target="_blank" style="text-decoration:none;">'
+        '<button style="background-color:#4CAF50; color:white; border:none; padding:10px 20px; '
+        'text-align:center; text-decoration:none; display:inline-block; font-size:16px; margin:4px 2px; '
+        'cursor:pointer; border-radius:4px;">Skill Development Tools</button></a>',
+        unsafe_allow_html=True
+    )
+    st.markdown(
+        '<a href="https://blog.linkedin.com/professional-networking-tips" target="_blank" style="text-decoration:none;">'
+        '<button style="background-color:#4CAF50; color:white; border:none; padding:10px 20px; '
+        'text-align:center; text-decoration:none; display:inline-block; font-size:16px; margin:4px 2px; '
+        'cursor:pointer; border-radius:4px;">Professional Networking Tips</button></a>',
+        unsafe_allow_html=True
+    )
 
+# Get Support Links
 with col4:
     st.markdown("### 📞 Get Support")
-    st.write("- [Contact Academic Advisors](#)")
-    st.write("- [Frequently Asked Questions (FAQ)](#)")
-    st.write("- [Join the Community Forum](#)")
+    st.markdown(
+        '<a href="https://www.northeastern.edu/cs/advising/" target="_blank" style="text-decoration:none;">'
+        '<button style="background-color:#4CAF50; color:white; border:none; padding:10px 20px; '
+        'text-align:center; text-decoration:none; display:inline-block; font-size:16px; margin:4px 2px; '
+        'cursor:pointer; border-radius:4px;">Contact Academic Advisors</button></a>',
+        unsafe_allow_html=True
+    )
+    st.markdown(
+        '<a href="https://www.reddit.com/r/learnprogramming" target="_blank" style="text-decoration:none;">'
+        '<button style="background-color:#4CAF50; color:white; border:none; padding:10px 20px; '
+        'text-align:center; text-decoration:none; display:inline-block; font-size:16px; margin:4px 2px; '
+        'cursor:pointer; border-radius:4px;">Join the Community Forum</button></a>',
+        unsafe_allow_html=True
+    )
 
 # Footer for branding and user support
 st.markdown("---")
@@ -62,3 +93,8 @@ st.markdown("""
     Built with ❤️ using Streamlit | [Privacy Policy](#) | [Terms of Use](#)
 </small>
 """, unsafe_allow_html=True)
+
+
+
+
+
