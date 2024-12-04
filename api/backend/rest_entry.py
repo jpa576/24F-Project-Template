@@ -42,4 +42,5 @@ def create_app():
     app.register_blueprint(user, url_prefix='/u')
     app.register_blueprint(Assessments, url_prefix='/ass')
 
+    print(app.url_map)
     return app

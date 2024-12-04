@@ -25,7 +25,7 @@ st.markdown("---")
 
 # Function to fetch career progress data
 def fetch_career_progress():
-    api_url = "http://api:4000/u/get_progress"
+    api_url = "http://api:4000/u/1/get_progress"
     try:
         with st.spinner("Fetching career progress data..."):
             response = requests.get(api_url, timeout=10)  # 10-second timeout
