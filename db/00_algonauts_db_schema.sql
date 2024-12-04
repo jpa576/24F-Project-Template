@@ -106,7 +106,8 @@ CREATE TABLE CodingAssessments (
     assessment_id INT UNSIGNED PRIMARY KEY AUTO_INCREMENT,
     skill_id INT UNSIGNED,
     problem_statement TEXT,
-    expected_output TEXT,
+    input_example TEXT, -- New column for input example
+    expected_output TEXT, -- Output expected for the given input
     FOREIGN KEY (skill_id) REFERENCES TechSkills(tech_skill_id)
 );
 
@@ -209,4 +210,7 @@ CREATE TABLE UserCareerProgress (
   FOREIGN KEY (user_id) REFERENCES Users(user_id) ON DELETE CASCADE,
   FOREIGN KEY (career_path_id) REFERENCES CareerPaths(career_path_id) ON DELETE CASCADE
 );
+
+
+
 
