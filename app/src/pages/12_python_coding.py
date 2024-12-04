@@ -5,7 +5,7 @@ import sqlite3
 
 # Database connection setup (update connection details if necessary)
 DB_FILE = "path_to_your_database.db"  # Update this with the actual database path
-
+# Function fetches random python question
 def fetch_random_python_question():
     try:
         # Connect to the database

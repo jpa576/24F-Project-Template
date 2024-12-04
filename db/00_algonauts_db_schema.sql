@@ -93,7 +93,6 @@ CREATE TABLE CareerPaths (
   demand DECIMAL(2, 1)                                    -- Demand rating (e.g., 4.7 out of 5.0)
 );
 
-
 CREATE TABLE CareerPathSkills (
     career_path_id INT UNSIGNED NOT NULL,
     tech_skill_id INT UNSIGNED NOT NULL,
