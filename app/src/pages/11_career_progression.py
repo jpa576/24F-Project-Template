@@ -112,7 +112,7 @@ with col3:
 with col4:
     if st.button('📈 Practice relevant skills', use_container_width=True):
         st.success("Redirecting to Skill Recommendations Page...", icon="📈")
-        st.switch_page('pages/12_python_coding.py')
+        st.switch_page('pages/12_CodingQuestions.py')
 
 # Footer for branding and navigation
 st.markdown("---")
