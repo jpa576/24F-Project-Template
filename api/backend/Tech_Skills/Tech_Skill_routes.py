@@ -35,3 +35,21 @@ def get_all_skills():
         current_app.logger.error(f"Error fetching all courses: {e}")
         return jsonify({"error": "An error occurred while fetching courses."}), 500
 
+@tech_skills.route('/skills/by_demand', methods=['GET'])
+def get_skills_by_demand():
+    """
+    Fetch skills ranked by popularity score in descending order.
+    """
+    try:
+        connection = get_db_connection()
+        with connection.cursor() as cursor:
+            cursor.execute("""
+                SELECT skill_name, complexity, description, popularity_score
+                FROM TechSkills
+                ORDER BY popularity_score DESC
+            """)
+            data = cursor.fetchall()
+        return jsonify(data)
+    except Exception as e:
+        current_app.logger.error(f"Error fetching skills by demand: {e}")
+        return jsonify({"error": "An error occurred while fetching skills by demand."}), 500
