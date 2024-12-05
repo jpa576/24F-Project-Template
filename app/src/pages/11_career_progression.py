@@ -24,27 +24,38 @@ st.write("### Track your progress and uncover opportunities tailored to your goa
 # Divider for clarity
 st.markdown("---")
 
+# API Endpoints
+USER_PROGRESS_API = "http://api:4000/u/1/progress"
+USER_SKILLS_API = "http://api:4000/u/1/skills"
 
-# Function to fetch career progress data
-def fetch_career_progress():
-    api_url = "http://api:4000/u/1/progress"
+# Fetch User Progress
+def fetch_user_progress():
     try:
-        with st.spinner("Fetching career progress data..."):
-            response = requests.get(api_url, timeout=10)  # 10-second timeout
-            response.raise_for_status()
-            response_data = response.json()
-            return response_data.get("data", [])  # Extract the 'data' key
+        response = requests.get(USER_PROGRESS_API)
+        response.raise_for_status()
+        return response.json().get("data", [])
     except requests.exceptions.RequestException as e:
         st.error(f"⚠️ Unable to fetch progress data: {e}")
         return []
 
+# Fetch User Skills
+def fetch_user_skills():
+    try:
+        response = requests.get(USER_SKILLS_API)
+        response.raise_for_status()
+        return response.json().get("data", [])
+    except requests.exceptions.RequestException as e:
+        st.error(f"⚠️ Unable to fetch user skills: {e}")
+        return []
 
-# Fetch progress data
-progress_data = fetch_career_progress()
+# Fetch data
+user_progress = fetch_user_progress()
+user_skills = fetch_user_skills()
 
-# Main layout: Career Progress and Insights
+# Main layout: Career Progress and Skills
 col1, col2 = st.columns([1, 1])
 
+# Career Progress Section
 with col1:
     st.markdown("## 📊 Your Career Progress")
     st.write("""
@@ -52,15 +63,12 @@ with col1:
     and future steps for achieving your career goals.
     """)
 
-    if progress_data:
-        # Create a DataFrame from the extracted 'data' list
-        df = pd.DataFrame(progress_data)
-
-        # Cleanly format the DataFrame for display
+    if user_progress:
+        df = pd.DataFrame(user_progress)
         st.markdown("### 📈 Progress Overview")
         st.table(df.rename(columns={"career_name": "Career Name", "progress_percentage": "Progress (%)"}))
 
-        # Visualize Progress
+        # Visualize Progress with Bar Chart
         fig = px.bar(
             df,
             x="career_name",
@@ -80,46 +88,21 @@ with col1:
     else:
         st.info("🚧 **No progress data available. Start your career journey today!**", icon="🚀")
 
+# User Skills Section
 with col2:
-    st.markdown("## 🎯 Insights for Your Career Path")
+    st.markdown("## 🛠️ Your Acquired Skills")
     st.write("""
-    Gain insights into demand, salaries, and key benchmarks for your chosen career path. 
-    Use this data to stay ahead of the curve.
+    Explore the skills you've acquired and their acquisition dates. Keep learning to achieve your goals.
     """)
 
-    # Ensure progress_data is available
-    if progress_data:
-        # Initialize session state for current career index
-        if "career_index" not in st.session_state:
-            st.session_state["career_index"] = 0
-
-        # Get the current career data
-        current_career = progress_data[st.session_state["career_index"]]
-
-        # Display Career Insights
-        st.markdown("### 📋 Career Overview")
-        st.write(f"**Career Name:** {current_career['career_name']}")
-        st.write(f"**Progress:** {current_career['progress_percentage']}%")
-
-        # Placeholder for additional career details (e.g., demand, salary, description)
-        st.markdown("### 📊 Additional Insights")
-        st.write(f"💰 **Average Salary:** ${current_career.get('salary', 'N/A'):,}")
-        st.write(f"🔥 **Demand:** {current_career.get('demand', 'N/A')}/5")
-        st.write(f"📜 **Description:** {current_career.get('description', 'No description available.')}")
-
-        # Navigation Buttons
-        col_prev, col_next = st.columns([1, 1])
-        with col_prev:
-            if st.button("⬅️ Previous", key="prev"):
-                if st.session_state["career_index"] > 0:
-                    st.session_state["career_index"] -= 1
-
-        with col_next:
-            if st.button("➡️ Next", key="next"):
-                if st.session_state["career_index"] < len(progress_data) - 1:
-                    st.session_state["career_index"] += 1
+    if user_skills:
+        skills_df = pd.DataFrame(user_skills)
+        st.markdown("### 🗂️ Skills Overview")
+        st.table(
+            skills_df.rename(columns={"skill_name": "Skill Name", "acquired_date": "Acquired Date"})
+        )
     else:
-        st.info("🚧 **No insights available. Start tracking your career paths!**", icon="📊")
+        st.info("🚧 **No skills data available. Start acquiring new skills today!**", icon="🎓")
 
 # Divider for additional sections
 st.markdown("---")
@@ -147,7 +130,7 @@ with col4:
         st.success("Redirecting to Skill Recommendations Page...", icon="📈")
         st.switch_page('pages/12_CodingQuestions.py')
 
-# Footer for branding and navigation
+# Footer
 st.markdown("---")
 st.markdown("""
 <small>

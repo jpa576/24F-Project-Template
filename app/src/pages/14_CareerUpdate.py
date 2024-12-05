@@ -5,7 +5,8 @@ from modules.nav import SideBarLinks
 
 # Streamlit Page Configuration
 st.set_page_config(page_title="Manage Career Paths", layout="wide", initial_sidebar_state="expanded")
-# initialize sidebar links
+
+# Initialize sidebar links
 SideBarLinks()
 
 # Styled Header
@@ -131,6 +132,3 @@ with col2:
                 delete_career_path(career_path_id)
     else:
         st.info("You are not following any careers to remove.")
-st.write("Debug user_careers:", user_careers)
-
-
