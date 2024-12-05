@@ -87,8 +87,8 @@ def get_user_careers(user_id):
         connection = get_db_connection()
         with connection.cursor(pymysql.cursors.DictCursor) as cursor:
             cursor.execute("""
-                SELECT DISTINCT 
-                    c.career_name
+                SELECT
+                    c.career_name, c.career_path_id
                 FROM 
                     UserCareerProgress ucp
                 JOIN 

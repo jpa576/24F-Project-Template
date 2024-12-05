@@ -60,7 +60,7 @@ with col1:
         st.markdown("### 📈 Progress Overview")
         st.table(df.rename(columns={"career_name": "Career Name", "progress_percentage": "Progress (%)"}))
 
-        # Optional: Visualize Progress
+        # Visualize Progress
         fig = px.bar(
             df,
             x="career_name",
@@ -86,8 +86,40 @@ with col2:
     Gain insights into demand, salaries, and key benchmarks for your chosen career path. 
     Use this data to stay ahead of the curve.
     """)
-    st.empty()  # Placeholder for career path insights
-    st.info("🔍 **Career Insights Will Appear Here Soon!**", icon="📊")
+
+    # Ensure progress_data is available
+    if progress_data:
+        # Initialize session state for current career index
+        if "career_index" not in st.session_state:
+            st.session_state["career_index"] = 0
+
+        # Get the current career data
+        current_career = progress_data[st.session_state["career_index"]]
+
+        # Display Career Insights
+        st.markdown("### 📋 Career Overview")
+        st.write(f"**Career Name:** {current_career['career_name']}")
+        st.write(f"**Progress:** {current_career['progress_percentage']}%")
+
+        # Placeholder for additional career details (e.g., demand, salary, description)
+        st.markdown("### 📊 Additional Insights")
+        st.write(f"💰 **Average Salary:** ${current_career.get('salary', 'N/A'):,}")
+        st.write(f"🔥 **Demand:** {current_career.get('demand', 'N/A')}/5")
+        st.write(f"📜 **Description:** {current_career.get('description', 'No description available.')}")
+
+        # Navigation Buttons
+        col_prev, col_next = st.columns([1, 1])
+        with col_prev:
+            if st.button("⬅️ Previous", key="prev"):
+                if st.session_state["career_index"] > 0:
+                    st.session_state["career_index"] -= 1
+
+        with col_next:
+            if st.button("➡️ Next", key="next"):
+                if st.session_state["career_index"] < len(progress_data) - 1:
+                    st.session_state["career_index"] += 1
+    else:
+        st.info("🚧 **No insights available. Start tracking your career paths!**", icon="📊")
 
 # Divider for additional sections
 st.markdown("---")
