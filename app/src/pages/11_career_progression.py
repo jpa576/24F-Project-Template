@@ -5,6 +5,12 @@ import pandas as pd
 import plotly.express as px
 from modules.nav import SideBarLinks
 
+
+# Set the current page context
+if "current_page" not in st.session_state:
+    st.session_state["current_page"] = None
+st.session_state["current_page"] = "Career Progress Dashboard"
+
 # Configure logger
 logger = logging.getLogger(__name__)
 
