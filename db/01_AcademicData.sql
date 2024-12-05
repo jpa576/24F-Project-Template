@@ -156,32 +156,3 @@ INSERT INTO CoursePrerequisites (department, course_number, prerequisite_departm
 ('CS', '4530', 'CS', '3500'),  -- Fundamentals of Software Engineering requires Object-Oriented Design
 ('CY', '3740', 'CY', '2550'),  -- Systems Security requires Foundations of Cybersecurity
 ('CY', '4740', 'CY', '3740');  -- Network Security requires Systems Security
-
--- Create a table to map courses to career paths
-CREATE TABLE CareerPathCourses (
-    career_path_id INT UNSIGNED NOT NULL,
-    department VARCHAR(10) NOT NULL,
-    course_number VARCHAR(10) NOT NULL,
-    PRIMARY KEY (career_path_id, department, course_number),
-    FOREIGN KEY (career_path_id) REFERENCES CareerPaths(career_path_id) ON DELETE CASCADE,
-    FOREIGN KEY (department, course_number) REFERENCES AcademicCourses(department, course_number) ON DELETE CASCADE
-);
-
--- Insert mock data for career paths
--- Assuming career_path_id 1 is Software Engineer
-INSERT INTO CareerPathCourses (career_path_id, department, course_number)
-VALUES
-(1, 'CS', '2500'), -- Fundamentals of Computer Science 1
-(1, 'CS', '2510'), -- Fundamentals of Computer Science 2
-(1, 'CS', '3000'), -- Algorithms and Data
-(1, 'CS', '3500'), -- Object-Oriented Design
-(1, 'CS', '4500'); -- Software Development
-
--- Assuming career_path_id 2 is Data Scientist
-INSERT INTO CareerPathCourses (career_path_id, department, course_number)
-VALUES
-(2, 'CS', '1800'), -- Discrete Structures
-(2, 'CS', '3000'), -- Algorithms and Data
-(2, 'DS', '4400'), -- Machine Learning and Data Mining 1
-(2, 'DS', '4420'), -- Machine Learning and Data Mining 2
-(2, 'CS', '4100'); -- Artificial Intelligence

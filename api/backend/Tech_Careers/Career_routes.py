@@ -31,7 +31,7 @@ def get_all_careers():
         connection = get_db_connection()
         with connection.cursor(pymysql.cursors.DictCursor) as cursor:
             cursor.execute("""
-                SELECT career_path_id, career_name, salary, demand 
+                SELECT *
                 FROM CareerPaths
             """)
             data = cursor.fetchall()
