@@ -1,9 +1,13 @@
 import streamlit as st
 import requests
 import pandas as pd
+from modules.nav import SideBarLinks
+
 
 # Streamlit Page Configuration
 st.set_page_config(page_title="Manage Career Paths", layout="wide", initial_sidebar_state="expanded")
+# Initialize sidebar navigation
+SideBarLinks()
 
 # Styled Header
 st.markdown("""

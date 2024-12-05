@@ -61,7 +61,7 @@ if st.button('Act as Marcus, a CS student using the platform for career and acad
             type = 'primary', 
             use_container_width=True):
     st.session_state['authenticated'] = True
-    st.session_state['role'] = 'user'
+    st.session_state['role'] = 'CS student'
     st.session_state['first_name'] = 'Marcus'
     st.switch_page('pages/10_userdash_home.py')
 

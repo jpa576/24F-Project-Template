@@ -1,12 +1,17 @@
 import logging
 import streamlit as st
 import requests
+from modules.nav import SideBarLinks
 
 # Configure logger
 logger = logging.getLogger(__name__)
 
+
 # Set page configuration
 st.set_page_config(page_title="Coding Challenges", layout="wide")
+
+# Initialize sidebar navigation
+SideBarLinks()
 
 # Page Header
 st.markdown(
