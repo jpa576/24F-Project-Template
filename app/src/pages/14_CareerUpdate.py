@@ -1,9 +1,12 @@
 import streamlit as st
 import requests
 import pandas as pd
+from modules.nav import SideBarLinks
 
 # Streamlit Page Configuration
 st.set_page_config(page_title="Manage Career Paths", layout="wide", initial_sidebar_state="expanded")
+# initialize sidebar links
+SideBarLinks()
 
 # Styled Header
 st.markdown("""
@@ -129,3 +132,5 @@ with col2:
     else:
         st.info("You are not following any careers to remove.")
 st.write("Debug user_careers:", user_careers)
+
+
