@@ -40,7 +40,7 @@ def get_all_careers():
         current_app.logger.error(f"Error fetching all careers: {e}")
         return jsonify({"error": "An error occurred while fetching careers."}), 500
 
-# Route to get skills for a specific career path
+# Route to get skills    for a specific career path
 @careers.route('/career_skills', methods=['GET'])
 def get_career_skills():
     career_path_id = request.args.get('career_path_id')
@@ -78,3 +78,22 @@ def get_career_noskills():
     except Exception as e:
         current_app.logger.error(f"Error fetching careers without skills: {e}")
         return jsonify({"error": "An error occurred while fetching careers without skills."}), 500
+
+@careers.route('/by_salary', methods=['GET'])
+def get_careers_by_salary():
+    """
+    Fetch careers ranked by salary in descending order.
+    """
+    try:
+        connection = get_db_connection()
+        with connection.cursor() as cursor:
+            cursor.execute("""
+                SELECT career_name, description, salary, demand
+                FROM CareerPaths
+                ORDER BY salary DESC
+            """)
+            data = cursor.fetchall()
+        return jsonify({"data": data})
+    except Exception as e:
+        current_app.logger.error(f"Error fetching careers by salary: {e}")
+        return jsonify({"error": "An error occurred while fetching careers by salary."}), 500

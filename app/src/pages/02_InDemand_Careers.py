@@ -7,7 +7,7 @@ from modules.nav import SideBarLinks
 SideBarLinks()
 
 # Set the header of the page
-st.header('Careers')
+st.header('Careers Ranked by Salary')
 
 # Access the session state to make a more customized/personalized app experience
 if "first_name" in st.session_state:
@@ -16,31 +16,28 @@ else:
     st.warning("Please log in to personalize your experience.")
 
 # API URL
-API_URL = "http://api:4000/careers/all_careers"
+API_URL = "http://api:4000/careers/by_salary"
 
 # Fetch careers from the API
 def fetch_careers():
     try:
         response = requests.get(API_URL)
         response.raise_for_status()  # Raise an error for bad status codes
-        careers = response.json()
+        response_json = response.json()
 
-        # Validate the response data structure
-        if isinstance(careers, list) and len(careers) > 0:
-            if isinstance(careers[0], dict):
-                # If response is a list of dictionaries
-                df = pd.DataFrame(careers)
-            elif isinstance(careers[0], list):
-                # If response is a list of lists, map it to a DataFrame
-                df = pd.DataFrame(careers, columns=["career_path_id", "career_name", "description", "salary", "demand"])
-            else:
-                st.warning("Unexpected data format from the API.")
-                return pd.DataFrame()  # Return an empty DataFrame in case of mismatch
+        # Extract the "data" field if it exists
+        if "data" in response_json and isinstance(response_json["data"], list):
+            careers = response_json["data"]
         else:
+            st.warning("Unexpected data format from the API.")
+            return pd.DataFrame()  # Return an empty DataFrame if data is invalid
+
+        if not careers:
             st.warning("No data received from the API.")
             return pd.DataFrame()
 
-        return df
+        # Create DataFrame from the extracted data
+        return pd.DataFrame(careers, columns=["career_name", "description", "salary", "demand"])
     except requests.exceptions.RequestException as e:
         st.error(f"Error fetching careers: {e}")
         return pd.DataFrame()
@@ -50,7 +47,7 @@ careers_df = fetch_careers()
 
 # Display the careers
 if not careers_df.empty:
-    st.write("### Top 10 Careers")
+    st.write("### Top 10 Careers Ranked by Salary")
 
     # Map columns manually
     column_mapping = {
@@ -61,7 +58,7 @@ if not careers_df.empty:
     }
     careers_df = careers_df.rename(columns=column_mapping)
 
-    # Ensure salary is numeric and sort by salary (highest first)
+    # Ensure salary is numeric and sort by it (highest first)
     if 'Salary' in careers_df.columns:
         careers_df['Salary'] = pd.to_numeric(careers_df['Salary'], errors='coerce')  # Convert salary to numeric
         careers_df = careers_df.sort_values(by='Salary', ascending=False)
@@ -106,7 +103,7 @@ if not careers_df.empty:
             next_item()
 
     # Show the complete DataFrame below for reference
-    st.write("### All Careers")
+    st.write("### All Careers Ranked by Salary")
     st.dataframe(careers_df)
 else:
     st.warning("No careers available.")

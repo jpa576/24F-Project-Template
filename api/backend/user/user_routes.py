@@ -178,3 +178,77 @@ def add_user_career(user_id):
     except Exception as e:
         current_app.logger.error(f"Error adding career path: {e}")
         return jsonify({"error": "An error occurred while adding the career path."}), 500
+
+
+@user.route('/<int:user_id>/academic_progress', methods=['GET'])
+def get_academic_progress(user_id):
+    """
+    Fetch academic progression data for a user, including current (in-progress),
+    completed, and required (not-started) courses.
+    """
+    try:
+        connection = get_db_connection()
+        with connection.cursor(pymysql.cursors.DictCursor) as cursor:
+            # Fetch current courses (in-progress)
+            cursor.execute("""
+                SELECT 
+                    ucp.department AS Department, 
+                    ucp.course_number AS `Course Number`,
+                    ac.course_name AS `Course Name`,
+                    ac.course_description AS Description,
+                    ac.credits AS Credits
+                FROM UserCourseProgress ucp
+                LEFT JOIN AcademicCourses ac 
+                    ON ucp.department = ac.department AND ucp.course_number = ac.course_number
+                WHERE ucp.user_id = %s AND ucp.progress_status = 'in-progress'
+            """, (user_id,))
+            current_courses = cursor.fetchall()
+
+            # Fetch completed courses
+            cursor.execute("""
+                SELECT 
+                    ucp.department AS Department, 
+                    ucp.course_number AS `Course Number`,
+                    ac.course_name AS `Course Name`,
+                    ac.course_description AS Description,
+                    ac.credits AS Credits
+                FROM UserCourseProgress ucp
+                LEFT JOIN AcademicCourses ac 
+                    ON ucp.department = ac.department AND ucp.course_number = ac.course_number
+                WHERE ucp.user_id = %s AND ucp.progress_status = 'completed'
+            """, (user_id,))
+            completed_courses = cursor.fetchall()
+
+            # Fetch required courses (not-started) based on CareerPathCourses
+            cursor.execute("""
+                SELECT 
+                    cpc.department AS Department,
+                    cpc.course_number AS `Course Number`,
+                    ac.course_name AS `Course Name`,
+                    ac.course_description AS Description,
+                    ac.credits AS Credits
+                FROM CareerPathCourses cpc
+                LEFT JOIN AcademicCourses ac 
+                    ON cpc.department = ac.department AND cpc.course_number = ac.course_number
+                WHERE cpc.career_path_id IN (
+                    SELECT career_path_id 
+                    FROM UserCareerProgress 
+                    WHERE user_id = %s
+                ) AND CONCAT(cpc.department, cpc.course_number) NOT IN (
+                    SELECT CONCAT(department, course_number)
+                    FROM UserCourseProgress
+                    WHERE user_id = %s
+                )
+            """, (user_id, user_id))
+            required_courses = cursor.fetchall()
+
+        # Return the data in the required format
+        return jsonify({
+            "status": "success",
+            "current": current_courses,
+            "completed": completed_courses,
+            "required": required_courses
+        })
+    except Exception as e:
+        current_app.logger.error(f"Error fetching academic progress: {e}")
+        return jsonify({"error": "An error occurred while fetching academic progression."}), 500

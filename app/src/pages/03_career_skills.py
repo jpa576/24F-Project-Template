@@ -13,91 +13,66 @@ st.title('🎓 Career Skills Explorer')
 user_name = st.session_state.get('first_name', 'Guest')
 st.subheader(f"👋 Welcome, {user_name}! Explore skills associated with your dream careers.")
 
-# API URL for fetching career skills
-API_URL = "http://api:4000/careers/career_skills1"
+# API URLs
+CAREERS_API_URL = "http://api:4000/careers/all_careers"
+CAREER_SKILLS_API_URL = "http://api:4000/careers/career_skills"
 
-
-# Function to fetch career skills from the API
-def fetch_career_skills():
+# Fet ch all careers
+@st.cache_data
+def fetch_all_careers():
     try:
-        with st.spinner("Fetching career skills..."):
-            response = requests.get(API_URL, timeout=10)  # 10-second timeout
-            response.raise_for_status()  # Raise exception for HTTP errors
-            return response.json()  # Parse JSON response
+        response = requests.get(CAREERS_API_URL)
+        response.raise_for_status()
+        data = response.json().get("data", [])
+        return pd.DataFrame(data)
     except requests.exceptions.RequestException as e:
-        st.error(f"⚠️ Unable to fetch career skills: {e}")
-        return []
+        st.error(f"⚠️ Unable to fetch careers: {e}")
+        return pd.DataFrame()
 
+# Fetch skills for a specific career
+def fetch_career_skills(career_path_id):
+    try:
+        response = requests.get(CAREER_SKILLS_API_URL, params={"career_path_id": career_path_id})
+        response.raise_for_status()
+        data = response.json().get("data", [])
+        return pd.DataFrame(data)
+    except requests.exceptions.RequestException as e:
+        st.error(f"⚠️ Unable to fetch skills for the selected career: {e}")
+        return pd.DataFrame()
 
-# Fetch career skills
-career_skills = fetch_career_skills()
+# Fetch all careers
+careers_df = fetch_all_careers()
 
-# Display the career skills table
-if career_skills:
-    st.markdown("## 📂 Available Careers and Skills")
-
-    # Convert the data into a DataFrame
-    df = pd.DataFrame(career_skills, columns=['Career', 'Skill'])
-
-    # Add a dropdown to filter by career
-    st.markdown("### 🎯 Filter by Career")
-    unique_careers = df['Career'].unique()
-    selected_career = st.selectbox("Select a Career", ["All"] + list(unique_careers))
-
-    # Filter data based on the career selection
-    filtered_df_career = df if selected_career == "All" else df[df['Career'] == selected_career]
-
-    # Display the filtered data in a styled table
-    st.markdown("### 📋 Career Skills Table (Filtered by Career)")
-    st.write(filtered_df_career.style.set_table_styles(
-        [
-            {"selector": "thead th", "props": [("background-color", "#4CAF50"), ("color", "white")]},
-            {"selector": "tbody tr:nth-child(even)", "props": [("background-color", "#f2f2f2")]},
-        ]
-    ))
-
-    # Add a text input with auto-completion to filter by skill
-    st.markdown("### 🔍 Search Careers by Skill")
-    all_skills = sorted(df['Skill'].unique())  # Get all unique skills
-    search_skill = st.text_input(
-        "Type a Skill to See Associated Careers (Auto-Complete Enabled)",
-        placeholder="Start typing a skill...",
-        help="Search for skills like 'Python', 'Machine Learning', etc."
+if not careers_df.empty:
+    # Create a dropdown to select a career
+    st.markdown("### 🎯 Select a Career")
+    careers_df = careers_df.rename(columns={"career_name": "Career Name", "career_path_id": "Career ID"})
+    selected_career = st.selectbox(
+        "Choose a Career to View Its Skills",
+        options=["Select a Career"] + careers_df["Career Name"].tolist()
     )
 
-    # Show a dropdown with suggestions as users type
-    if search_skill:
-        suggestions = [skill for skill in all_skills if search_skill.lower() in skill.lower()]
-        if suggestions:
-            st.markdown("### 🔍 Suggestions:")
-            st.write(", ".join(suggestions))
+    if selected_career != "Select a Career":
+        # Get the selected career's ID
+        selected_career_id = careers_df[careers_df["Career Name"] == selected_career]["Career ID"].iloc[0]
 
-        # Filter by the entered skill
-        filtered_df_skill = df[df['Skill'].str.contains(search_skill, case=False, na=False)]
-        if not filtered_df_skill.empty:
-            st.markdown("### 📋 Careers Associated with the Skill")
-            st.write(filtered_df_skill.style.set_table_styles(
+        # Fetch skills for the selected career
+        career_skills_df = fetch_career_skills(selected_career_id)
+
+        if not career_skills_df.empty:
+            st.markdown(f"### 📋 Skills for {selected_career}")
+            st.write(career_skills_df.style.set_table_styles(
                 [
-                    {"selector": "thead th", "props": [("background-color", "#FF5722"), ("color", "white")]},
+                    {"selector": "thead th", "props": [("background-color", "#4CAF50"), ("color", "white")]},
                     {"selector": "tbody tr:nth-child(even)", "props": [("background-color", "#f2f2f2")]},
                 ]
             ))
         else:
-            st.warning(f"No careers found associated with the skill: {search_skill}")
-
-    # Add a download button for career-skills data
-    st.markdown("### 📥 Download Skills Data")
-    csv = filtered_df_career.to_csv(index=False)
-    st.download_button(
-        label="Download as CSV",
-        data=csv,
-        file_name=f"{selected_career.lower().replace(' ', '_')}_skills.csv" if selected_career != "All" else "all_career_skills.csv",
-        mime="text/csv",
-    )
+            st.warning(f"No skills found for {selected_career}.")
 else:
-    st.warning("No career skills data available at the moment. Please try again later.")
+    st.warning("No careers available. Please try again later.")
 
 # Add footer for better user experience
 st.markdown("---")
-st.markdown("💡 **Tip:** Select a career from the dropdown or type a skill in the search bar to filter the data.")
+st.markdown("💡 **Tip:** Select a career from the dropdown to view its required skills.")
 st.caption("Powered by Career Skills API | Designed with ❤️ using Streamlit.")

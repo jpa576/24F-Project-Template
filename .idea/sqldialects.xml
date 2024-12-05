@@ -4,9 +4,10 @@
     <file url="file://$PROJECT_DIR$/api/backend/CsClasses/Academic_classes_routes.py" dialect="GenericSQL" />
     <file url="file://$PROJECT_DIR$/api/backend/products/products_routes.py" dialect="GenericSQL" />
     <file url="file://$PROJECT_DIR$/db/00_algonauts_db_schema.sql" dialect="MySQL" />
-    <file url="file://$PROJECT_DIR$/db/01_AcademicData.sql" dialect="MySQL" />
+    <file url="file://$PROJECT_DIR$/db/01_CareerPaths_Data.sql" dialect="MySQL" />
+    <file url="file://$PROJECT_DIR$/db/02_AcademicData.sql" dialect="MySQL" />
     <file url="file://$PROJECT_DIR$/db/02_TechSkills_Data.sql" dialect="MySQL" />
-    <file url="file://$PROJECT_DIR$/db/03_CareerPaths_Data.sql" dialect="MySQL" />
+    <file url="file://$PROJECT_DIR$/db/04_CareerPathSkills_Data.sql" dialect="MySQL" />
     <file url="file://$PROJECT_DIR$/db/05_user_data.sql" dialect="MySQL" />
     <file url="file://$PROJECT_DIR$/db/06_InterviewQuestions_Data.sql" dialect="MySQL" />
     <file url="PROJECT" dialect="MySQL" />

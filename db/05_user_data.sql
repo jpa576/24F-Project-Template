@@ -1,5 +1,6 @@
 -- Insert user into Users table
-INSERT INTO Users (name, email, year, plan_id)
+
+INSERT IGNORE INTO Users (name, email, year, plan_id)
 VALUES ('Marcus', 'mca007@example.com', 2, NULL);
 
 -- Assuming "Marcus" is assigned user_id 1, and using sample data for other tables

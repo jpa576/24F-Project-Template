@@ -10,7 +10,7 @@ st.markdown("# 📚 Academic Progression")
 st.write("Track your academic growth and assess your learning journey.")
 
 # API URL for Marcus's academic progress
-API_URL = "http://api:4000/user/academic_progress?user_id=1"
+API_URL = "http://api:4000/u/1/academic_progress"
 
 # Fetch academic progress data from the API
 def fetch_academic_progress():
@@ -18,12 +18,6 @@ def fetch_academic_progress():
         response = requests.get(API_URL)
         response.raise_for_status()
         data = response.json()
-
-        # Ensure keys exist in response
-        for key in ["current", "completed", "required"]:
-            if key not in data:
-                data[key] = []
-
         return data
     except requests.exceptions.RequestException as e:
         st.error(f"Error fetching academic progression: {e}")
@@ -32,30 +26,29 @@ def fetch_academic_progress():
 # Fetch data
 academic_progress = fetch_academic_progress()
 
-# Debugging: Display the raw API response
-st.json(academic_progress)
+# Styled table display function
+def display_table(title, data, color):
+    """
+    Displays a styled table with a given title, data, and color scheme.
+    """
+    st.markdown(f"## {title}")
+    if data:
+        df = pd.DataFrame(data)
+        st.dataframe(
+            df.style.set_table_styles(
+                [
+                    {"selector": "thead th", "props": [("background-color", color), ("color", "white")]},
+                    {"selector": "tbody tr:nth-child(even)", "props": [("background-color", "#f9f9f9")]},
+                ]
+            )
+        )
+    else:
+        st.warning(f"No data available for {title.lower()}.")
 
-# Display tables with error handling
-st.markdown("### 📘 Courses Currently Taking")
-try:
-    current_courses = pd.DataFrame(academic_progress["current"], columns=["Department", "Course Number", "Course Name", "Description", "Credits"])
-    st.dataframe(current_courses)
-except Exception as e:
-    st.warning(f"Error displaying current courses: {e}")
-
-st.markdown("### ✅ Completed Courses")
-try:
-    completed_courses = pd.DataFrame(academic_progress["completed"], columns=["Department", "Course Number", "Course Name", "Description", "Credits"])
-    st.dataframe(completed_courses)
-except Exception as e:
-    st.warning(f"Error displaying completed courses: {e}")
-
-st.markdown("### 📌 Required Courses")
-try:
-    required_courses = pd.DataFrame(academic_progress["required"], columns=["Department", "Course Number", "Course Name", "Description", "Credits"])
-    st.dataframe(required_courses)
-except Exception as e:
-    st.warning(f"Error displaying required courses: {e}")
+# Display sections
+display_table("📘 Courses Currently Taking", academic_progress.get("current", []), "#3498db")
+display_table("✅ Completed Courses", academic_progress.get("completed", []), "#2ecc71")
+display_table("📌 Required Courses", academic_progress.get("required", []), "#e74c3c")
 
 # Footer
 st.markdown("---")

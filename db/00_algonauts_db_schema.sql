@@ -10,6 +10,7 @@ DROP TABLE IF EXISTS UserCourseProgress;
 DROP TABLE IF EXISTS CourseTechSkills;
 DROP TABLE IF EXISTS CoursePrerequisites;
 DROP TABLE IF EXISTS UserCareerProgress;
+
 DROP TABLE IF EXISTS CareerPathSkills;
 DROP TABLE IF EXISTS RequiredCourses;
 DROP TABLE IF EXISTS ConcentrationCourses;
@@ -23,6 +24,7 @@ DROP TABLE IF EXISTS AcademicPrograms;
 
 -- Drop parent tables
 DROP TABLE IF EXISTS CareerPaths;
+DROP TABLE IF EXISTS CareerPathCourses;
 DROP TABLE IF EXISTS TechSkills;
 DROP TABLE IF EXISTS InterviewQuestions;
 DROP TABLE IF EXISTS AcademicCourses;
@@ -92,6 +94,17 @@ CREATE TABLE CareerPaths (
   salary INT UNSIGNED,                                    -- Expected average salary in USD
   demand DECIMAL(2, 1)                                    -- Demand rating (e.g., 4.7 out of 5.0)
 );
+
+-- Create a table to map courses to career paths
+CREATE TABLE CareerPathCourses (
+    career_path_id INT UNSIGNED NOT NULL,
+    department VARCHAR(10) NOT NULL,
+    course_number VARCHAR(10) NOT NULL,
+    PRIMARY KEY (career_path_id, department, course_number),
+    FOREIGN KEY (career_path_id) REFERENCES CareerPaths(career_path_id) ON DELETE CASCADE,
+    FOREIGN KEY (department, course_number) REFERENCES AcademicCourses(department, course_number) ON DELETE CASCADE
+);
+
 
 CREATE TABLE CareerPathSkills (
     career_path_id INT UNSIGNED NOT NULL,
