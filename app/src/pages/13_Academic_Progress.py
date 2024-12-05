@@ -1,9 +1,13 @@
 import streamlit as st
 import pandas as pd
 import requests
+from modules.nav import SideBarLinks
 
 # Set the page configuration
 st.set_page_config(page_title="Academic Progression", layout="wide")
+
+# Initialize sidebar navigation
+SideBarLinks()
 
 # Header
 st.markdown("# 📚 Academic Progression")

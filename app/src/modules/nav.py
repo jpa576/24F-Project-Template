@@ -24,6 +24,21 @@ def CareerSkillNav():
     st.sidebar.page_link("pages/03_career_skills.py", label="Explore Careers and their Required Skills", icon="🌍")
 
 
+#### ------------------------ Role of User Dashboard ------------------------
+def UserDashHomeNav():
+    st.sidebar.page_link("pages/10_userdash_home.py", label="User Dashboard", icon="🏠")
+
+def CareerProgressNav():
+    st.sidebar.page_link("pages/11_career_progression.py", label="Career Progress Dashboard", icon="🚀")
+
+def AcademicProgressNav():
+    st.sidebar.page_link("pages/13_Academic_Progress.py", label="Academic Progress Dashboard", icon="📚")
+
+def CodingChallengesNav():
+    st.sidebar.page_link("pages/12_CodingQuestions.py", label="Explore Coding Challenges", icon="🧑‍💻")
+
+def UpdateCareerPath():
+    st.sidebar.page_link("pages/14_CareerUpdate.py", label="Update Careers Goals", icon="🧑‍💻")
 
 #### ------------------------ Role of pol_strat_advisor ------------------------
 def PolStratAdvHomeNav():
@@ -94,7 +109,12 @@ def SideBarLinks(show_home=False):
             CareerNav()
             CareerSkillNav()
 
-
+        if st.session_state["role"]== "CS student":
+            UserDashHomeNav()
+            CareerProgressNav()
+            AcademicProgressNav()
+            CodingChallengesNav()
+            UpdateCareerPath()
 
         # Show World Bank Link and Map Demo Link if the user is a political strategy advisor role.
         if st.session_state["role"] == "pol_strat_advisor":
