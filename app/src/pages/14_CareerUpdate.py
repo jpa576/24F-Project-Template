@@ -9,31 +9,50 @@ st.set_page_config(page_title="Career Path Manager", layout="wide", initial_side
 SideBarLinks()
 
 # Header Styling and Title
+# Header Styling and Title
 st.markdown("""
     <style>
         .title {
             text-align: center;
-            font-family: 'Arial Black', sans-serif;
-            color: #4CAF50;
-            margin-bottom: 10px;
+            font-family: 'Helvetica Neue', sans-serif;
+            color: #2C3E50;
+            margin-bottom: 15px;
         }
         .subtitle {
             text-align: center;
-            font-family: 'Arial', sans-serif;
-            color: #555555;
+            font-family: 'Open Sans', sans-serif;
+            color: #34495E;
             margin-top: 0;
+            margin-bottom: 10px;
         }
         .highlight {
-            color: #FF5722;
+            color: #E74C3C;
+            font-weight: bold;
         }
         .st-button {
-            margin-top: 20px;
+            background-color: #1ABC9C;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .st-button:hover {
+            background-color: #16A085;
+        }
+        hr {
+            border: none;
+            height: 1px;
+            background: linear-gradient(to right, #1ABC9C, #2C3E50);
+            margin: 20px 0;
         }
     </style>
     <h1 class="title">🌟 Career Path Manager</h1>
-    <p class="subtitle">Seamlessly manage your career paths with just a few clicks.</p>
-    <hr style="border: 1px solid #ddd;">
+    <p class="subtitle">Seamlessly manage your <span class="highlight">career paths</span> with just a few clicks.</p>
+    <hr>
 """, unsafe_allow_html=True)
+
 
 # API Base URLs
 USER_API_BASE_URL = "http://api:4000/u/1"
