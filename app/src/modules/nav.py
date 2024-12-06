@@ -40,6 +40,9 @@ def CodingChallengesNav():
 def UpdateCareerPath():
     st.sidebar.page_link("pages/14_CareerUpdate.py", label="Update Careers Goals", icon="🧑‍💻")
 
+def PythonIDE():
+    st.sidebar.page_link("pages/12_python_coding.py", label="Practive Coding Skills", icon ='🖥️')
+
 #### ------------------------ Role of pol_strat_advisor ------------------------
 def PolStratAdvHomeNav():
     st.sidebar.page_link(
@@ -115,6 +118,7 @@ def SideBarLinks(show_home=False):
             AcademicProgressNav()
             CodingChallengesNav()
             UpdateCareerPath()
+            PythonIDE()
 
         # Show World Bank Link and Map Demo Link if the user is a political strategy advisor role.
         if st.session_state["role"] == "pol_strat_advisor":

@@ -1,5 +1,4 @@
 use algonauts_db;
-DESCRIBE CareerPaths;
 -- Insert sample career paths into the CareerPaths table
 INSERT INTO CareerPaths (career_name, description, salary, demand) VALUES
 ('Software Engineer', 'Designs, develops, and maintains software systems.', 120000, 4.5),
