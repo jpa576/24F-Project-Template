@@ -74,3 +74,24 @@ def save_submission():
     except Exception as e:
         current_app.logger.error(f"Error saving coding submission: {e}")
         return jsonify({"error": "An error occurred while saving the submission."}), 500
+
+
+
+@Assessments.route('/career_assessments/<int:career_path_id>', methods=['GET'])
+def get_career_assessments(career_path_id):
+    try:
+        print(f"Route accessed with career_path_id: {career_path_id}")  # Debug statement
+        connection = get_db_connection()
+        with connection.cursor(pymysql.cursors.DictCursor) as cursor:
+            cursor.execute("""
+                SELECT ca.assessment_id, ca.problem_statement, ca.input_example, ca.expected_output
+                FROM CareerPathAssessments cpa
+                JOIN CodingAssessments ca ON cpa.assessment_id = ca.assessment_id
+                WHERE cpa.career_path_id = %s
+            """, (career_path_id,))
+            data = cursor.fetchall()
+        return jsonify({"status": "success", "data": data or []}), 200
+    except Exception as e:
+        print(f"Error in route: {e}")  # Debug statement
+        current_app.logger.error(f"Error fetching assessments for career path {career_path_id}: {e}")
+        return jsonify({"error": "An error occurred while fetching assessments."}), 500

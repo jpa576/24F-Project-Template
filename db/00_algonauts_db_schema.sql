@@ -3,6 +3,7 @@ use algonauts_db;
 SET FOREIGN_KEY_CHECKS = 0;
 
 -- Drop child tables first
+DROP TABLE IF EXISTS CareerPathAssessments;
 DROP TABLE IF EXISTS UserCodingSubmissions;
 DROP TABLE IF EXISTS CodingAssessments;
 DROP TABLE IF EXISTS UserSkills;
@@ -224,6 +225,13 @@ CREATE TABLE UserCareerProgress (
   FOREIGN KEY (career_path_id) REFERENCES CareerPaths(career_path_id) ON DELETE CASCADE
 );
 
+CREATE TABLE CareerPathAssessments (
+    mapping_id INT AUTO_INCREMENT PRIMARY KEY,
+    career_path_id INT UNSIGNED NOT NULL,
+    assessment_id  INT UNSIGNED NOT NULL,
+    FOREIGN KEY (career_path_id) REFERENCES CareerPaths(career_path_id) ON DELETE CASCADE,
+    FOREIGN KEY (assessment_id) REFERENCES CodingAssessments(assessment_id) ON DELETE CASCADE
+);
 
 
 

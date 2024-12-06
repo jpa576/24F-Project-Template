@@ -109,3 +109,9 @@ INSERT INTO CodingAssessments (skill_id, problem_statement, input_example, expec
  'Write a Python function to find the maximum value in a list.',
  'Input: [4, 2, 9, 7]',
  'Output: 9');
+
+-- Link Assessments to the Software Engineer Career Path
+INSERT INTO CareerPathAssessments (career_path_id, assessment_id)
+SELECT 1 AS career_path_id, assessment_id
+FROM CodingAssessments
+WHERE skill_id = (SELECT tech_skill_id FROM TechSkills WHERE skill_name = 'Python');
