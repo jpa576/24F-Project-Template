@@ -189,3 +189,101 @@ INSERT INTO CareerPathCourses (career_path_id, department, course_number)
 VALUES
 (2, 'CS', '2800'), -- Logic and Computation (Example additional required course)
 (2, 'CS', '4820'); -- Computer-Aided Reasoning
+
+-- For Cybersecurity Analyst (CareerPath ID: 3)
+INSERT INTO CareerPathCourses (career_path_id, department, course_number)
+VALUES
+(3, 'CY', '2550'), -- Foundations of Cybersecurity
+(3, 'CY', '3740'), -- Systems Security
+(3, 'CY', '4740'), -- Network Security
+(3, 'CY', '4760'); -- Security of Wireless and Mobile Systems
+
+-- For AI/ML Engineer (CareerPath ID: 4)
+INSERT INTO CareerPathCourses (career_path_id, department, course_number)
+VALUES
+(4, 'CS', '4100'), -- Artificial Intelligence
+(4, 'DS', '4400'), -- Machine Learning and Data Mining 1
+(4, 'DS', '4420'), -- Machine Learning and Data Mining 2
+(4, 'CS', '4610'), -- Robotic Science and Systems
+(4, 'CS', '4120'); -- Natural Language Processing
+
+-- For Web Developer (CareerPath ID: 5)
+INSERT INTO CareerPathCourses (career_path_id, department, course_number)
+VALUES
+(5, 'CS', '4550'), -- Web Development
+(5, 'CS', '3520'), -- Programming in C++
+(5, 'IS', '4200'), -- Information Retrieval
+(5, 'CS', '4520'); -- Mobile Application Development
+
+-- For Mobile App Developer (CareerPath ID: 6)
+INSERT INTO CareerPathCourses (career_path_id, department, course_number)
+VALUES
+(6, 'CS', '4520'), -- Mobile Application Development
+(6, 'CS', '4710'), -- Mobile and Wireless Systems
+(6, 'CS', '4550'), -- Web Development
+(6, 'CS', '3520'); -- Programming in C++
+
+-- For Cloud Engineer (CareerPath ID: 7)
+INSERT INTO CareerPathCourses (career_path_id, department, course_number)
+VALUES
+(7, 'CS', '3650'), -- Computer Systems
+(7, 'CY', '4740'), -- Network Security
+(7, 'CY', '3740'); -- Systems Security
+
+-- For DevOps Engineer (CareerPath ID: 8)
+INSERT INTO CareerPathCourses (career_path_id, department, course_number)
+VALUES
+(8, 'CS', '3650'), -- Computer Systems
+(8, 'CS', '4730'), -- Distributed Systems
+(8, 'CY', '3740'); -- Systems Security
+
+-- For Network Administrator (CareerPath ID: 9)
+INSERT INTO CareerPathCourses (career_path_id, department, course_number)
+VALUES
+(9, 'CS', '4700'), -- Network Fundamentals
+(9, 'CY', '4740'), -- Network Security
+(9, 'CY', '3740'); -- Systems Security
+
+-- For Database Administrator (CareerPath ID: 10)
+INSERT INTO CareerPathCourses (career_path_id, department, course_number)
+VALUES
+(10, 'CS', '3000'), -- Algorithms and Data
+(10, 'CS', '4410'), -- Compilers
+(10, 'CS', '4730'); -- Distributed Systems
+
+-- For Game Developer (CareerPath ID: 12)
+INSERT INTO CareerPathCourses (career_path_id, department, course_number)
+VALUES
+(12, 'CS', '4150'), -- Game Artificial Intelligence
+(12, 'CS', '4300'), -- Computer Graphics
+(12, 'CS', '4550'); -- Web Development
+
+-- For UX/UI Designer (CareerPath ID: 13)
+INSERT INTO CareerPathCourses (career_path_id, department, course_number)
+VALUES
+(13, 'IS', '4300'), -- Human Computer Interaction
+(13, 'IS', '4800'), -- Empirical Research Methods
+(13, 'DS', '4200'); -- Information Presentation and Visualization
+
+-- For Blockchain Developer (CareerPath ID: 14)
+INSERT INTO CareerPathCourses (career_path_id, department, course_number)
+VALUES
+(14, 'CS', '4820'), -- Computer-Aided Reasoning
+(14, 'CS', '4610'), -- Robotic Science and Systems
+(14, 'CY', '4770'); -- Cryptography
+
+-- For Robotics Engineer (CareerPath ID: 15)
+INSERT INTO CareerPathCourses (career_path_id, department, course_number)
+VALUES
+(15, 'CS', '4610'), -- Robotic Science and Systems
+(15, 'CS', '4300'), -- Computer Graphics
+(15, 'DS', '4420'); -- Machine Learning and Data Mining 2
+
+-- For Penetration Tester (CareerPath ID: 31)
+INSERT INTO CareerPathCourses (career_path_id, department, course_number)
+VALUES
+(31, 'CY', '2550'), -- Foundations of Cybersecurity
+(31, 'CY', '3740'), -- Systems Security
+(31, 'CY', '4760'); -- Security of Wireless and Mobile Systems
+
+

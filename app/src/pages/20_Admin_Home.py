@@ -1,17 +1,41 @@
 import logging
-logger = logging.getLogger(__name__)
-
 import streamlit as st
 from modules.nav import SideBarLinks
 import requests
 
-st.set_page_config(layout = 'wide')
+# Configure logger
+logger = logging.getLogger(__name__)
 
+# Set page configuration
+st.set_page_config(page_title="System Admin Home Page", layout='wide')
+
+# Initialize sidebar navigation
 SideBarLinks()
 
-st.title('System Admin Home Page')
+# Page Title
+st.title("System Admin Home Page")
+st.write("Manage all system data, including user information, courses, and skills.")
 
-if st.button('Update ML Models', 
-             type='primary',
-             use_container_width=True):
-  st.switch_page('pages/21_ML_Model_Mgmt.py')
+# Admin Actions
+st.markdown("### Admin Actions:")
+col1, col2, col3 = st.columns(3)
+
+# Button to navigate to User Info Admin page
+with col1:
+    if st.button("🔍 Manage User Information", type="primary", use_container_width=True):
+        st.switch_page("pages/21_UserInfoAdmin.py")
+
+# Button to navigate to Course Info Admin page
+with col2:
+    if st.button("📚 Manage Courses", type="primary", use_container_width=True):
+        st.switch_page("pages/22_CourseInfoAdmin.py")
+
+# Button to navigate to Skills Info Admin page
+with col3:
+    if st.button("💼 Manage Skills and Careers", type="primary", use_container_width=True):
+        st.switch_page("pages/23_SkillsInfoAdmin.py")
+
+# Optional: Keep the ML Model Management button for context
+st.markdown("---")
+if st.button("⚙️ Update ML Models", type="secondary", use_container_width=True):
+    st.switch_page("pages/21_ML_Model_Mgmt.py")

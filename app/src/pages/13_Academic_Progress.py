@@ -13,22 +13,57 @@ SideBarLinks()
 st.markdown("# 📚 Academic Progression")
 st.write("Track your academic growth and assess your learning journey.")
 
-# API URL for Marcus's academic progress
-API_URL = "http://api:4000/u/1/academic_progress"
+# API URLs
+ACADEMIC_API_URL = "http://api:4000/u/1/academic_progress"  # API for academic progress
+USER_INFO_API_URL = "http://api:4000/u/1/info"             # API for user info
+USER_CAREERS_API_URL = "http://api:4000/u/1/careers"       # API for user careers
 
 # Fetch academic progress data from the API
 def fetch_academic_progress():
     try:
-        response = requests.get(API_URL)
+        response = requests.get(ACADEMIC_API_URL)
         response.raise_for_status()
-        data = response.json()
-        return data
+        return response.json()
     except requests.exceptions.RequestException as e:
         st.error(f"Error fetching academic progression: {e}")
         return {"current": [], "completed": [], "required": []}
 
+# Fetch user information
+def fetch_user_info():
+    try:
+        response = requests.get(USER_INFO_API_URL)
+        response.raise_for_status()
+        return response.json().get("data", {"name": "User"})
+    except requests.exceptions.RequestException as e:
+        st.error(f"Error fetching user info: {e}")
+        return {"name": "User"}
+
+# Fetch user careers
+def fetch_user_careers():
+    try:
+        response = requests.get(USER_CAREERS_API_URL)
+        response.raise_for_status()
+        return [career["career_name"] for career in response.json().get("data", [])]
+    except requests.exceptions.RequestException as e:
+        st.error(f"Error fetching user careers: {e}")
+        return []
+
 # Fetch data
 academic_progress = fetch_academic_progress()
+user_info = fetch_user_info()
+user_careers = fetch_user_careers()
+
+# Generate dynamic header for required courses
+user_name = user_info.get("name", "User")
+if user_careers:
+    career_paths_text = ", ".join(user_careers)
+    st.markdown(
+        f"### Hello {user_name}, here are your required courses based on your career paths: **{career_paths_text}**"
+    )
+else:
+    st.markdown(
+        f"### Hello {user_name}, here are your required courses for your academic journey:"
+    )
 
 # Styled table display function
 def display_table(title, data, color):

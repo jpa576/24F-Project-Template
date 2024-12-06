@@ -103,8 +103,6 @@ def get_user_careers(user_id):
         return jsonify({"error": "An error occurred while fetching user careers."}), 500
 
 
-
-
 #route to update user career choice
 @user.route('/<int:user_id>/update_careers/<int:career_id>', methods=['PUT'])
 def update_user_career(user_id, career_id):
@@ -128,6 +126,99 @@ def update_user_career(user_id, career_id):
     except Exception as e:
         current_app.logger.error(f"Error updating user career: {e}")
         return jsonify({"error": "An error occurred while updating user career."}), 500
+
+@user.route('/all_users', methods=['GET'])
+def get_all_users():
+    """
+    Fetch all users with their basic information.
+    """
+    try:
+        connection = get_db_connection()
+        with connection.cursor(pymysql.cursors.DictCursor) as cursor:
+            cursor.execute("SELECT user_id, name, email, year, plan_id FROM Users")
+            users = cursor.fetchall()
+        return jsonify({"status": "success", "data": users})
+    except Exception as e:
+        current_app.logger.error(f"Error fetching all users: {e}")
+        return jsonify({"error": "An error occurred while fetching user data."}), 500
+
+@user.route('/add_user', methods=['POST'])
+def add_user():
+    """
+    Add a new user to the database.
+    """
+    try:
+        data = request.json
+        name = data.get("name")
+        email = data.get("email")
+        year = data.get("year")
+        plan_id = data.get("plan_id", None)
+
+        if not all([name, email, year]):
+            return jsonify({"error": "Missing required fields: name, email, or year."}), 400
+
+        connection = get_db_connection()
+        with connection.cursor() as cursor:
+            cursor.execute("""
+                INSERT INTO Users (name, email, year, plan_id)
+                VALUES (%s, %s, %s, %s)
+            """, (name, email, year, plan_id))
+            connection.commit()
+
+        return jsonify({"status": "success", "message": "User added successfully."}), 201
+    except Exception as e:
+        current_app.logger.error(f"Error adding user: {e}")
+        return jsonify({"error": "An error occurred while adding the user."}), 500
+
+
+@user.route('/<int:user_id>/remove_user', methods=['DELETE'])
+def remove_user(user_id):
+    """
+    Remove a user by their user_id.
+    """
+    try:
+        connection = get_db_connection()
+        with connection.cursor() as cursor:
+            # Check if user exists
+            cursor.execute("SELECT * FROM Users WHERE user_id = %s", (user_id,))
+            user = cursor.fetchone()
+            if not user:
+                return jsonify({"error": "User not found."}), 404
+
+            # Delete the user
+            cursor.execute("DELETE FROM Users WHERE user_id = %s", (user_id,))
+            connection.commit()
+
+        return jsonify({"status": "success", "message": f"User with ID {user_id} removed successfully."}), 200
+    except Exception as e:
+        current_app.logger.error(f"Error in /remove_user: {e}")
+        return jsonify({"error": "An error occurred while removing the user."}), 500
+
+
+@user.route('/<int:user_id>/update_progress', methods=['PUT'])
+def update_user_progress(user_id):
+    """
+    Update the progression of a user in their career path.
+    """
+    try:
+        data = request.json
+        progress_percentage = data.get("progress_percentage")
+        if progress_percentage is None:
+            return jsonify({"error": "Progress percentage is required"}), 400
+
+        connection = get_db_connection()
+        with connection.cursor() as cursor:
+            cursor.execute("""
+                UPDATE UserCareerProgress
+                SET progress_percentage = %s
+                WHERE user_id = %s
+            """, (progress_percentage, user_id))
+            connection.commit()
+
+        return jsonify({"status": "success", "message": "User progress updated successfully."})
+    except Exception as e:
+        current_app.logger.error(f"Error updating user progress: {e}")
+        return jsonify({"error": "An error occurred while updating user progress."}), 500
 
 
 
