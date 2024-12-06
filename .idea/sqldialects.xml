@@ -8,7 +8,7 @@
     <file url="file://$PROJECT_DIR$/db/02_AcademicData.sql" dialect="MySQL" />
     <file url="file://$PROJECT_DIR$/db/02_TechSkills_Data.sql" dialect="MySQL" />
     <file url="file://$PROJECT_DIR$/db/04_CareerPathSkills_Data.sql" dialect="MySQL" />
-    <file url="file://$PROJECT_DIR$/db/05_User_Data.sql" dialect="MySQL" />
+    <file url="file://$PROJECT_DIR$/db/05_user_data.sql" dialect="MySQL" />
     <file url="file://$PROJECT_DIR$/db/06_InterviewQuestions_Data.sql" dialect="MySQL" />
     <file url="PROJECT" dialect="MySQL" />
   </component>
