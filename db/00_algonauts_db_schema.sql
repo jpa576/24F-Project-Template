@@ -3,6 +3,7 @@ use algonauts_db;
 SET FOREIGN_KEY_CHECKS = 0;
 
 -- Drop child tables first
+DROP TABLE IF EXISTS CareerPathAssessments;
 DROP TABLE IF EXISTS UserCodingSubmissions;
 DROP TABLE IF EXISTS CodingAssessments;
 DROP TABLE IF EXISTS UserSkills;
@@ -185,7 +186,6 @@ CREATE TABLE UserCodingSubmissions (
     career_path_id INT UNSIGNED,
     submitted_code TEXT,
     execution_result TEXT,
-    score DECIMAL(5,2),
     status ENUM('correct', 'incorrect') DEFAULT 'incorrect',
     submission_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (user_id) REFERENCES Users(user_id),
@@ -204,14 +204,28 @@ CREATE TABLE UserCourseProgress (
   FOREIGN KEY (department, course_number) REFERENCES AcademicCourses(department, course_number) ON DELETE CASCADE
 );
 
--- Create User Skills Table
+-- Updated User Skills Table
 CREATE TABLE UserSkills (
   user_skill_id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
   user_id INT UNSIGNED NOT NULL,
   tech_skill_id INT UNSIGNED NOT NULL,
-  acquired_date DATE DEFAULT NULL,
+  acquired_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP, -- Use TIMESTAMP for default current date
+  skill_level ENUM('Beginner', 'Intermediate', 'Advanced', 'Expert') DEFAULT 'Beginner', -- Skill proficiency level
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, -- Timestamp for creation
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP, -- Timestamp for updates
   FOREIGN KEY (user_id) REFERENCES Users(user_id) ON DELETE CASCADE,
-  FOREIGN KEY (tech_skill_id) REFERENCES TechSkills(tech_skill_id) ON DELETE CASCADE
+  FOREIGN KEY (tech_skill_id) REFERENCES TechSkills(tech_skill_id) ON DELETE CASCADE,
+  UNIQUE (user_id, tech_skill_id) -- Ensure unique user-skill combination
+) ENGINE=InnoDB;
+
+
+
+CREATE TABLE CareerPathAssessments (
+    mapping_id INT AUTO_INCREMENT PRIMARY KEY,
+    career_path_id INT UNSIGNED NOT NULL,
+    assessment_id  INT UNSIGNED NOT NULL,
+    FOREIGN KEY (career_path_id) REFERENCES CareerPaths(career_path_id) ON DELETE CASCADE,
+    FOREIGN KEY (assessment_id) REFERENCES CodingAssessments(assessment_id) ON DELETE CASCADE
 );
 
 -- Create User Career Progress Table
@@ -223,7 +237,6 @@ CREATE TABLE UserCareerProgress (
   FOREIGN KEY (user_id) REFERENCES Users(user_id) ON DELETE CASCADE,
   FOREIGN KEY (career_path_id) REFERENCES CareerPaths(career_path_id) ON DELETE CASCADE
 );
-
 
 
 

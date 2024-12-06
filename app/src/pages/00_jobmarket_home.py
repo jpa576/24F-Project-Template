@@ -24,22 +24,7 @@ st.markdown(
     """
     - **Salary Explorer**: Compare salaries across roles, locations, and industries.
     - **Skills Demand Analysis**: See which technical skills employers are prioritizing in real time.
-    - **Job Growth Trends**: Visualize long-term trends in the tech job market.
-    - **Career Path Recommendations**: Find the right roles based on your unique skills.
-    - **Regional Opportunities**: Dive into job availability in your preferred locations.
-    """
-)
-
-# Data Source Acknowledgment
-st.write("")
-st.markdown("### 📈 **Data Sources**")
-st.markdown(
-    """
-    Our insights are powered by reliable, up-to-date data sources, including:
-    - **O*NET Online**: For occupational data and job characteristics.
-    - **Bureau of Labor Statistics (BLS)**: For employment projections and salary benchmarks.
-    - **Glassdoor & LinkedIn Trends**: For real-world salary reports and hiring trends.
-    - **World Bank Data**: For macroeconomic indicators.
+    - **Career Skills**: Visualize recommended skills for any career in our database.
     """
 )
 
@@ -64,16 +49,11 @@ with col3:
 # Footer with Contact Information and Data Credibility
 st.write("")
 st.write("---")
-st.markdown(
-    """
-    #### 💡 **Need Personalized Advice?**
-    Contact our job market experts or explore tailored insights for your skills and aspirations. 
-    """
-)
-st.write("")
 
 st.markdown(
     """
-    ##### 🌟 **Disclaimer**: The data and insights provided here are based on third-party sources (e.g., O*NET, Glassdoor). While we strive for accuracy, always cross-check with official sources before making career decisions.
+    ##### 🌟 **Disclaimer**: The insights provided are AI-generated and based on publicly available data sources (e.g., O*NET, Glassdoor). 
+    While we strive for accuracy, always cross-check with official sources before making career decisions. AI-generated data may not 
+    fully capture real-world nuances and trends.
     """
 )

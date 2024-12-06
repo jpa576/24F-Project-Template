@@ -30,17 +30,14 @@ def get_all_careers():
     try:
         connection = get_db_connection()
         with connection.cursor(pymysql.cursors.DictCursor) as cursor:
-            cursor.execute("""
-                SELECT *
-                FROM CareerPaths
-            """)
+            cursor.execute("SELECT * FROM CareerPaths")
             data = cursor.fetchall()
-        return jsonify({"status": "success", "data": data})
+        return jsonify({"status": "success", "data": data}), 200
     except Exception as e:
         current_app.logger.error(f"Error fetching all careers: {e}")
         return jsonify({"error": "An error occurred while fetching careers."}), 500
 
-# Route to get skills    for a specific career path
+# Route to get skills for a specific career path
 @careers.route('/career_skills', methods=['GET'])
 def get_career_skills():
     career_path_id = request.args.get('career_path_id')
@@ -56,7 +53,7 @@ def get_career_skills():
                 WHERE cks.career_path_id = %s
             """, (career_path_id,))
             data = cursor.fetchall()
-        return jsonify({"status": "success", "data": data or []})
+        return jsonify({"status": "success", "data": data or []}), 200
     except Exception as e:
         current_app.logger.error(f"Error fetching career skills: {e}")
         return jsonify({"error": "An error occurred while fetching career skills."}), 500
@@ -74,26 +71,50 @@ def get_career_noskills():
                 WHERE cks.tech_skill_id IS NULL
             """)
             data = cursor.fetchall()
-        return jsonify({"status": "success", "data": data})
+        return jsonify({"status": "success", "data": data}), 200
     except Exception as e:
         current_app.logger.error(f"Error fetching careers without skills: {e}")
         return jsonify({"error": "An error occurred while fetching careers without skills."}), 500
 
+# Route to get careers ranked by salary
 @careers.route('/by_salary', methods=['GET'])
 def get_careers_by_salary():
-    """
-    Fetch careers ranked by salary in descending order.
-    """
     try:
         connection = get_db_connection()
-        with connection.cursor() as cursor:
+        with connection.cursor(pymysql.cursors.DictCursor) as cursor:
             cursor.execute("""
                 SELECT career_name, description, salary, demand
                 FROM CareerPaths
                 ORDER BY salary DESC
             """)
             data = cursor.fetchall()
-        return jsonify({"data": data})
+        return jsonify({"status": "success", "data": data}), 200
     except Exception as e:
         current_app.logger.error(f"Error fetching careers by salary: {e}")
         return jsonify({"error": "An error occurred while fetching careers by salary."}), 500
+
+# Route to update career progress for a user
+@careers.route('/<int:user_id>/update_progress/<int:career_path_id>', methods=['PUT'])
+def update_career_progress(user_id, career_path_id):
+    try:
+        # Parse the request data
+        data = request.json
+        progress_percentage = data.get("progress_percentage")
+
+        if progress_percentage is None or not (0 <= progress_percentage <= 100):
+            return jsonify({"error": "Invalid progress percentage. Must be between 0 and 100."}), 400
+
+        connection = get_db_connection()
+        with connection.cursor() as cursor:
+            # Update the progress in the database
+            cursor.execute("""
+                UPDATE UserCareerProgress
+                SET progress_percentage = %s
+                WHERE user_id = %s AND career_path_id = %s
+            """, (progress_percentage, user_id, career_path_id))
+            connection.commit()
+
+        return jsonify({"status": "success", "message": "Career progress updated successfully."}), 200
+    except Exception as e:
+        current_app.logger.error(f"Error updating career progress: {e}")
+        return jsonify({"error": "An error occurred while updating career progress."}), 500

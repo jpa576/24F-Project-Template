@@ -1,11 +1,11 @@
 import logging
 import streamlit as st
 import requests
+
 from modules.nav import SideBarLinks
 
 # Configure logger
 logger = logging.getLogger(__name__)
-
 
 # Set page configuration
 st.set_page_config(page_title="Coding Challenges", layout="wide")
@@ -24,25 +24,25 @@ st.markdown(
 # Divider for clarity
 st.markdown("---")
 
-# Function to fetch coding assessments
-def fetch_coding_assessments():
-    api_url = "http://api:4000/ass/all_assessments"
+# Function to fetch coding assessments for a specific career path
+def fetch_career_assessments(career_path_id):
+    api_url = f"http://api:4000/ass/career_assessments/{career_path_id}"
     try:
-        with st.spinner("Fetching coding challenges..."):
+        with st.spinner("Fetching coding challenges for Software Engineer..."):
             response = requests.get(api_url, timeout=10)
             response.raise_for_status()
-            data = response.json()  # Assume API returns a list
-            return data  # Directly return the list of problems
+            return response.json().get("data", [])
     except requests.exceptions.RequestException as e:
         st.error(f"⚠️ Unable to fetch coding challenges: {e}")
         return []
 
-# Fetch coding assessments
-coding_problems = fetch_coding_assessments()
+# Fetch coding challenges for the Software Engineer career path (career_path_id = 1)
+software_engineer_id = 1
+coding_problems = fetch_career_assessments(software_engineer_id)
 
 # Display coding problems dynamically
 if coding_problems:
-    st.markdown("## 🛠️ Available Coding Challenges")
+    st.markdown("## 🛠️ Available Coding Challenges for Software Engineers")
     for problem in coding_problems:
         # Extract problem details
         assessment_id = problem.get("assessment_id")
@@ -59,7 +59,7 @@ if coding_problems:
             # Redirect to the IDE page
             st.switch_page("pages/12_python_coding.py")
 else:
-    st.info("🚧 No coding challenges available. Please check back later.", icon="⚙️")
+    st.info("🚧 No coding challenges available for Software Engineers. Please check back later.", icon="⚙️")
 
 # Footer for branding
 st.markdown("---")
