@@ -21,17 +21,70 @@ def close_db_connection(exception):
     if db is not None:
         db.close()
 
-@courses.route('/all_courses', methods=['GET'])
+# Route to get all courses
+@course.route('/all_courses', methods=['GET'])
 def get_all_courses():
+    """
+    Fetch all courses from the database.
+    """
+    try:
+        connection = get_db_connection()
+        with connection.cursor(pymysql.cursors.DictCursor) as cursor:
+            cursor.execute("""
+                SELECT 
+                    course_id, 
+                    department, 
+                    course_number, 
+                    course_name, 
+                    course_description, 
+                    credits 
+                FROM AcademicCourses
+            """)
+            courses = cursor.fetchall()
+        return jsonify({"status": "success", "data": courses})
+    except Exception as e:
+        current_app.logger.error(f"Error fetching courses: {e}")
+        return jsonify({"status": "error", "message": "An error occurred while fetching courses."}), 500
+
+
+
+@courses.route('/add_course', methods=['POST'])
+def add_course():
+    try:
+        data = request.json
+        department = data.get('department')
+        course_number = data.get('course_number')
+        course_name = data.get('course_name')
+        description = data.get('description', '')
+        credits = data.get('credits')
+
+        if not all([department, course_number, course_name, credits]):
+            return jsonify({"error": "All fields except description are required"}), 400
+
+        connection = get_db_connection()
+        with connection.cursor() as cursor:
+            cursor.execute("""
+                INSERT INTO Courses (department, course_number, course_name, description, credits)
+                VALUES (%s, %s, %s, %s, %s)
+            """, (department, course_number, course_name, description, credits))
+            connection.commit()
+
+        return jsonify({"status": "success", "message": "Course added successfully"}), 201
+    except Exception as e:
+        current_app.logger.error(f"Error adding course: {e}")
+        return jsonify({"error": "An error occurred while adding the course"}), 500
+
+@courses.route('/remove_course/<int:course_id>', methods=['DELETE'])
+def remove_course(course_id):
     try:
         connection = get_db_connection()
         with connection.cursor() as cursor:
-            cursor.execute("SELECT * FROM AcademicCourses")
-            data = cursor.fetchall()
-        return jsonify(data)
+            cursor.execute("DELETE FROM AcademicCourses WHERE course_id = %s", (course_id,))
+            connection.commit()
+        return jsonify({"status": "success", "message": "Course removed successfully."}), 200
     except Exception as e:
-        current_app.logger.error(f"Error fetching all courses: {e}")
-        return jsonify({"error": "An error occurred while fetching courses."}), 500
+        current_app.logger.error(f"Error removing course: {e}")
+        return jsonify({"error": "An error occurred while removing the course."}), 500
 
 @courses.route('/concentration_courses', methods=['GET'])
 def get_concentration_courses():
