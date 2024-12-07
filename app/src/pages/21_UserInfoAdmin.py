@@ -1,12 +1,14 @@
 import streamlit as st
 import pandas as pd
 import requests
+from modules.nav import SideBarLinks
 
 # Set the page configuration
 st.set_page_config(page_title="Manage User Information", layout="wide")
+SideBarLinks()
 
 st.title("🔍 Manage User Information")
-st.write("View, update, manage user data, roles, and progression.")
+st.write("View,insert, and delete user data.")
 
 USER_API_URL = "http://api:4000/u"
 
@@ -28,20 +30,6 @@ if users:
     st.markdown("### Existing Users")
     st.dataframe(df_users)
 
-    # **Section 1: Update User Progress**
-    st.markdown("### Update User Progress")
-    user_id = st.selectbox("Select a User to Update:", df_users["user_id"])
-    new_progress = st.number_input("Update Progress (0-100):", min_value=0, max_value=100)
-
-    if st.button("Update User Progress"):
-        try:
-            response = requests.put(f"{USER_API_URL}/{user_id}", json={"progress_percentage": new_progress})
-            if response.status_code == 200:
-                st.success("User progress updated successfully!")
-            else:
-                st.error("Failed to update user progress.")
-        except requests.exceptions.RequestException as e:
-            st.error(f"Error updating user progress: {e}")
 
     # Add a New User
     st.markdown("### Add a New User")

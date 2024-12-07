@@ -32,10 +32,7 @@ with col2:
 
 # Button to navigate to Skills Info Admin page
 with col3:
-    if st.button("💼 Manage Skills and Careers", type="primary", use_container_width=True):
+    if st.button("💼 Manage Skills ", type="primary", use_container_width=True):
         st.switch_page("pages/23_SkillsInfoAdmin.py")
 
-# Optional: Keep the ML Model Management button for context
-st.markdown("---")
-if st.button("⚙️ Update ML Models", type="secondary", use_container_width=True):
-    st.switch_page("pages/21_ML_Model_Mgmt.py")
+
