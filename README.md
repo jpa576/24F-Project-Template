@@ -24,7 +24,7 @@ For System Administrators
 Administrative Tools:
 Manage users, roles, and permissions.
 Maintain course and skill data integrity.
-Setup Instructions
+# Setup Instructions
 Secrets Configuration
 Add a .env file in the root directory with the following secrets and configuration values:
 
