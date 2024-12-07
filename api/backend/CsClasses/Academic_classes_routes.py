@@ -78,20 +78,42 @@ def get_courses_without_skills():
         current_app.logger.error(f"Error fetching courses without skills: {e}")
         return jsonify({"error": "An error occurred while fetching courses without skills."}), 500
 
-@courses.route('/career paths', methods=['GET'])
-def course_info():
+@courses.route('/add_course', methods=['POST'])
+def add_course():
     try:
+        # Parse JSON data from the request
+        data = request.get_json()
+        department = data.get("department")
+        course_number = data.get("course_number")
+        course_name = data.get("course_name")
+        description = data.get("description")
+        credits = data.get("credits")
+
+        # Validate required fields
+        if not all([department, course_number, course_name, credits]):
+            return jsonify({"error": "Missing required fields (department, course_number, course_name, credits)."}), 400
+
         connection = get_db_connection()
         with connection.cursor() as cursor:
+            # Check for duplicate entries
             cursor.execute("""
-                SELECT
-                    *
-                FROM
-                    CareerPaths
-                ;
-            """)
-            data = cursor.fetchall()
-            return jsonify(data)
+                SELECT COUNT(*) FROM AcademicCourses
+                WHERE department = %s AND course_number = %s
+            """, (department, course_number))
+            if cursor.fetchone()[0] > 0:
+                return jsonify({"error": "Course with the same department and course number already exists."}), 400
+
+            # Insert new course
+            cursor.execute("""
+                INSERT INTO AcademicCourses (department, course_number, course_name, course_description, credits)
+                VALUES (%s, %s, %s, %s, %s)
+            """, (department, course_number, course_name, description, credits))
+            connection.commit()
+
+        return jsonify({"message": "Course added successfully!"}), 201
+    except pymysql.MySQLError as db_err:
+        current_app.logger.error(f"MySQL Error: {db_err}")
+        return jsonify({"error": f"Database error: {db_err}"}), 500
     except Exception as e:
-            current_app.logger.error(f"Error fetching courses info: {e}")
-            return jsonify({"error": "An error occurred while fetching course info."}), 500
+        current_app.logger.error(f"Unexpected error: {e}")
+        return jsonify({"error": f"An unexpected error occurred: {e}"}), 500

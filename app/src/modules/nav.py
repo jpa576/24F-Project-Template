@@ -25,6 +25,9 @@ def CareerSkillNav():
 
 
 #### ------------------------ Role of User Dashboard ------------------------
+#### ------------------------ Role of User Dashboard ------------------------
+
+# Links for User Dashboard Page
 def UserDashHomeNav():
     st.sidebar.page_link("pages/10_userdash_home.py", label="User Dashboard", icon="🏠")
 
@@ -34,14 +37,13 @@ def CareerProgressNav():
 def AcademicProgressNav():
     st.sidebar.page_link("pages/13_Academic_Progress.py", label="Academic Progress Dashboard", icon="📚")
 
+# Links for Career Progress Page
 def CodingChallengesNav():
     st.sidebar.page_link("pages/12_CodingQuestions.py", label="Explore Coding Challenges", icon="🧑‍💻")
 
-def UpdateCareerPath():
+def UpdateCareerPathNav():
     st.sidebar.page_link("pages/14_CareerUpdate.py", label="Update Careers Goals", icon="🧑‍💻")
 
-def PythonIDE():
-    st.sidebar.page_link("pages/12_python_coding.py", label="Practive Coding Skills", icon ='🖥️')
 
 #### ------------------------ Role of pol_strat_advisor ------------------------
 def PolStratAdvHomeNav():
@@ -112,13 +114,22 @@ def SideBarLinks(show_home=False):
             CareerNav()
             CareerSkillNav()
 
-        if st.session_state["role"]== "CS student":
-            UserDashHomeNav()
-            CareerProgressNav()
-            AcademicProgressNav()
-            CodingChallengesNav()
-            UpdateCareerPath()
-            PythonIDE()
+            # Role-specific logic
+        if st.session_state["role"] == "CS student":
+            current_page = st.session_state.get("current_page", "User Dashboard")
+            if current_page == "User Dashboard":
+                UserDashHomeNav()
+                CareerProgressNav()
+                AcademicProgressNav()
+            elif current_page == "Career Progress Dashboard":
+                UserDashHomeNav()
+                CareerProgressNav()
+                CodingChallengesNav()
+                UpdateCareerPathNav()
+            elif current_page == "Academic Progress Dashboard":
+                UserDashHomeNav()
+                AcademicProgressNav()
+
 
         # Show World Bank Link and Map Demo Link if the user is a political strategy advisor role.
         if st.session_state["role"] == "pol_strat_advisor":
