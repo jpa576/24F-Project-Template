@@ -45,7 +45,7 @@ code = st.text_area("Type your Python code here:", height=300, placeholder="e.g.
 st.markdown("### 🖥️ Output")
 if st.button("Run"):
     if not code.strip():
-        st.warning("Please enter some Python code to execute.")
+        st.warning("Please use print statement to express answer eg print(Output) .")
     else:
         # Redirect stdout to capture the print statements
         old_stdout = sys.stdout

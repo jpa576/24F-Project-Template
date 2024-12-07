@@ -4,7 +4,8 @@ import requests
 from modules.nav import SideBarLinks
 
 # Set the page configuration
-st.set_page_config(page_title="Academic Progression", layout="wide")
+st.set_page_config(page_title="Academic Progress Dashboard", layout="wide")
+st.session_state["current_page"] = "Academic Progress Dashboard"  # Or "Career Progress Dashboard", etc.
 
 # Initialize sidebar navigation
 SideBarLinks()
