@@ -197,7 +197,7 @@ def remove_user(user_id):
         return jsonify({"error": "An error occurred while removing the user."}), 500
 
 
-@user.route('/<int:user_id>/update_progress', methods=['PUT'])
+@user.route('/<int:user_id>/update_progress1', methods=['PUT'])
 def update_user_progress(user_id):
     """
     Update the progression of a user in their career path.
@@ -272,6 +272,29 @@ def add_user_career(user_id):
         current_app.logger.error(f"Error adding career path: {e}")
         return jsonify({"error": "An error occurred while adding the career path."}), 500
 
+@user.route('/<int:user_id>/update_progress', methods=['PUT'])
+def update_progress(user_id):
+    try:
+        data = request.json
+        career_path_id = data.get('career_path_id')
+        progress_increment = data.get('progress_increment')
+
+        if not career_path_id or not progress_increment:
+            return jsonify({"error": "Missing career_path_id or progress_increment"}), 400
+
+        connection = get_db_connection()
+        with connection.cursor() as cursor:
+            cursor.execute("""
+                UPDATE UserCareerProgress
+                SET progress_percentage = LEAST(progress_percentage + %s, 100)
+                WHERE user_id = %s AND career_path_id = %s
+            """, (progress_increment, user_id, career_path_id))
+            connection.commit()
+
+        return jsonify({"status": "success", "message": "Career progress updated!"}), 200
+    except Exception as e:
+        current_app.logger.error(f"Error updating progress: {e}")
+        return jsonify({"error": "An error occurred while updating progress."}), 500
 
 @user.route('/<int:user_id>/academic_progress', methods=['GET'])
 def get_academic_progress(user_id):
@@ -296,7 +319,6 @@ def get_academic_progress(user_id):
                 WHERE ucp.user_id = %s AND ucp.progress_status = 'in-progress'
             """, (user_id,))
             current_courses = cursor.fetchall()
-
             # Fetch completed courses
             cursor.execute("""
                 SELECT 
@@ -311,7 +333,6 @@ def get_academic_progress(user_id):
                 WHERE ucp.user_id = %s AND ucp.progress_status = 'completed'
             """, (user_id,))
             completed_courses = cursor.fetchall()
-
             # Fetch required courses (not-started) based on CareerPathCourses
             cursor.execute("""
                 SELECT 
@@ -334,7 +355,6 @@ def get_academic_progress(user_id):
                 )
             """, (user_id, user_id))
             required_courses = cursor.fetchall()
-
         # Return the data in the required format
         return jsonify({
             "status": "success",
@@ -345,28 +365,3 @@ def get_academic_progress(user_id):
     except Exception as e:
         current_app.logger.error(f"Error fetching academic progress: {e}")
         return jsonify({"error": "An error occurred while fetching academic progression."}), 500
-
-@user.route('/<int:user_id>/update_progress', methods=['PUT'])
-def update_progress(user_id):
-    try:
-        data = request.json
-        career_path_id = data.get("career_path_id")
-        progress_increment = data.get("progress_increment")
-
-        if not career_path_id or not progress_increment:
-            return jsonify({"error": "Missing career_path_id or progress_increment"}), 400
-
-        connection = get_db_connection()
-        with connection.cursor() as cursor:
-            cursor.execute("""
-                UPDATE UserCareerProgress
-                SET progress_percentage = LEAST(progress_percentage + %s, 100)
-                WHERE user_id = %s AND career_path_id = %s
-            """, (progress_increment, user_id, career_path_id))
-            connection.commit()
-
-        return jsonify({"status": "success", "message": "Career progress updated!"}), 200
-    except Exception as e:
-        current_app.logger.error(f"Error updating progress: {e}")
-        return jsonify({"error": "An error occurred while updating progress."}), 500
-

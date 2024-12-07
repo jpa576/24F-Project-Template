@@ -1,20 +1,18 @@
 # ------------------------------------------------------------
-# In this file, you can make some modifications to the Streamlit
-# app's global environment. 
-#
-# All of the possible config options can be found here:
-# https://docs.streamlit.io/develop/api-reference/configuration/config.toml
+# Streamlit Configuration File
+# Modify global settings for the Streamlit app.
+# Documentation: https://docs.streamlit.io/develop/api-reference/configuration/config.toml
 # ------------------------------------------------------------
 
-
 [client]
-# Turning the default sidebar navigation off so we 
-# can use our own
+# Turning off the default sidebar navigation to use a custom one
 showSidebarNavigation = false
 
 [theme]
-# Setting some basic config options related to the theme of the app
-base="light"
-primaryColor="#6550e6"
-font="monospace"
-
+# Space-themed design configuration
+base = "dark"                     # Dark mode for a space vibe
+primaryColor = "#4b0082"          # Deep indigo resembling outer space
+backgroundColor = "#1e1e2f"       # A near-black background for a cosmic feel
+secondaryBackgroundColor = "#282a36" # Slightly lighter background for contrast
+textColor = "#ffffff"             # White text for readability
+font = "monospace"                # Monospace font for a futuristic touch

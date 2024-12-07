@@ -5,7 +5,7 @@ from modules.nav import SideBarLinks
 
 # Set the page configuration
 st.set_page_config(page_title="Academic Progress Dashboard", layout="wide")
-st.session_state["current_page"] = "Academic Progress Dashboard"  # Or "Career Progress Dashboard", etc.
+st.session_state["current_page"] = "Academic Progress Dashboard"
 
 # Initialize sidebar navigation
 SideBarLinks()
@@ -15,21 +15,24 @@ st.markdown("# 📚 Academic Progression")
 st.write("Track your academic growth and assess your learning journey.")
 
 # API URLs
-ACADEMIC_API_URL = "http://api:4000/u/1/academic_progress"  # API for academic progress
-USER_INFO_API_URL = "http://api:4000/u/1/info"             # API for user info
-USER_CAREERS_API_URL = "http://api:4000/u/1/careers"       # API for user careers
+ACADEMIC_API_URL = "http://api:4000/u/1/academic_progress"
+USER_INFO_API_URL = "http://api:4000/u/1/info"
+USER_CAREERS_API_URL = "http://api:4000/u/1/careers"
 
-# Fetch academic progress data from the API
 def fetch_academic_progress():
     try:
         response = requests.get(ACADEMIC_API_URL)
         response.raise_for_status()
-        return response.json()
+        json_response = response.json()
+        return {
+            "current": json_response.get("current", []),
+            "completed": json_response.get("completed", []),
+            "required": json_response.get("required", [])
+        }
     except requests.exceptions.RequestException as e:
         st.error(f"Error fetching academic progression: {e}")
         return {"current": [], "completed": [], "required": []}
 
-# Fetch user information
 def fetch_user_info():
     try:
         response = requests.get(USER_INFO_API_URL)
@@ -39,7 +42,6 @@ def fetch_user_info():
         st.error(f"Error fetching user info: {e}")
         return {"name": "User"}
 
-# Fetch user careers
 def fetch_user_careers():
     try:
         response = requests.get(USER_CAREERS_API_URL)
@@ -66,11 +68,7 @@ else:
         f"### Hello {user_name}, here are your required courses for your academic journey:"
     )
 
-# Styled table display function
 def display_table(title, data, color):
-    """
-    Displays a styled table with a given title, data, and color scheme.
-    """
     st.markdown(f"## {title}")
     if data:
         df = pd.DataFrame(data)

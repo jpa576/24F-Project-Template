@@ -1,7 +1,6 @@
 import logging
 import streamlit as st
 import requests
-import pandas as pd
 import sys
 from io import StringIO
 from modules.nav import SideBarLinks
@@ -45,7 +44,7 @@ code = st.text_area("Type your Python code here:", height=300, placeholder="e.g.
 st.markdown("### 🖥️ Output")
 if st.button("Run"):
     if not code.strip():
-        st.warning("Please use print statement to express answer eg print(Output) .")
+        st.warning("Please enter some Python code to execute.")
     else:
         # Redirect stdout to capture the print statements
         old_stdout = sys.stdout
@@ -90,7 +89,7 @@ if st.button("Run"):
 
                     # Update career progress
                     try:
-                        progress_data = {"user_id": user_id, "career_path_id": career_path_id, "progress_increment": 5}
+                        progress_data = {"career_path_id": 1, "progress_increment": 5.0}
                         response = requests.put(UPDATE_PROGRESS_API, json=progress_data)
                         response.raise_for_status()
                         st.success("✅ Career progress updated by 5%!")

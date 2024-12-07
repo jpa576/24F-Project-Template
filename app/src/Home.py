@@ -1,77 +1,74 @@
 ##################################################
-# This is the main/entry-point file for the 
-# sample application for your project
+# Entry-Point File for the Sample Application
+# CS 3200 Semester Project: Algonauts
 ##################################################
 
-# Set up basic logging infrastructure
+# Import necessary libraries
 import logging
-logging.basicConfig(format='%(filename)s:%(lineno)s:%(levelname)s -- %(message)s', level=logging.INFO)
-logger = logging.getLogger(__name__)
-
-# import the main streamlit library as well
-# as SideBarLinks function from src/modules folder
 import streamlit as st
 from modules.nav import SideBarLinks
 
-# streamlit supports reguarl and wide layout (how the controls
-# are organized/displayed on the screen).
-st.set_page_config(layout = 'wide')
+# Set up logging infrastructure
+logging.basicConfig(
+    format='%(filename)s:%(lineno)s:%(levelname)s -- %(message)s',
+    level=logging.INFO
+)
+logger = logging.getLogger(__name__)
 
-# If a user is at this page, we assume they are not 
-# authenticated.  So we change the 'authenticated' value
-# in the streamlit session_state to false. 
+# Configure Streamlit layout
+st.set_page_config(
+    layout='wide',
+    page_icon="🚀",  # Astronaut icon for a professional look
+    page_title="Algonauts App"
+)
+
+# Initialize session state
 st.session_state['authenticated'] = False
 
-# Use the SideBarLinks function from src/modules/nav.py to control
-# the links displayed on the left-side panel. 
-# IMPORTANT: ensure src/.streamlit/config.toml sets
-# showSidebarNavigation = false in the [client] section
+# Sidebar navigation setup
+# IMPORTANT: Ensure src/.streamlit/config.toml sets `showSidebarNavigation = false` in the `[client]` section
 SideBarLinks(show_home=True)
 
 # ***************************************************
-#    The major content of this page
+# Main Content of the Home Page
 # ***************************************************
 
-# set the title of the page and provide a simple prompt. 
 logger.info("Loading the Home page of the app")
-st.title('CS 3200 Semester Project App: Algonauts')
-st.write('\n\n')
-st.write('### HI! Welcome to Algonauts! \n As which user would you like to log in?')
 
-# For each of the user personas for which we are implementing
-# functionality, we put a button on the screen that the user 
-# can click to MIMIC logging in as that mock user. 
+# Page title and introductory text
+st.title('CS 3200 Semester Project: Algonauts 🚀')
+st.write('### Welcome to Algonauts! \nSelect a user role to log in:')
 
-if st.button("Jack the Job Market Enthusiast",
-            type = 'primary', 
-            use_container_width=True):
-    # when user clicks the button, they are now considered authenticated
+# User role buttons for different personas
+if st.button(
+    label="Log in as Jack - Job Market Enthusiast",
+    type='primary',
+    use_container_width=True
+):
     st.session_state['authenticated'] = True
-    # we set the role of the current user
     st.session_state['role'] = 'Job Market Enthusiast'
-    # we add the first name of the user (so it can be displayed on 
-    # subsequent pages). 
     st.session_state['first_name'] = 'Jack'
-    # finally, we ask streamlit to switch to another page, in this case, the 
-    # landing page for this particular user type
-    logger.info("Logging in as jack- job market enthusiast")
+    logger.info("Logged in as Jack - Job Market Enthusiast")
     st.switch_page('pages/00_jobmarket_home.py')
 
-if st.button('Act as Marcus, a CS student using the platform for career and academic planning',
-            type = 'primary', 
-            use_container_width=True):
+if st.button(
+    label="Log in as Marcus - CS Student",
+    type='primary',
+    use_container_width=True
+):
     st.session_state['authenticated'] = True
-    st.session_state['role'] = 'CS student'
+    st.session_state['role'] = 'CS Student'
     st.session_state['first_name'] = 'Marcus'
+    logger.info("Logged in as Marcus - CS Student")
     st.switch_page('pages/10_userdash_home.py')
 
-if st.button('Act as System Administrator', 
-            type = 'primary', 
-            use_container_width=True):
+if st.button(
+    label="Log in as System Administrator",
+    type='primary',
+    use_container_width=True
+):
     st.session_state['authenticated'] = True
-    st.session_state['role'] = 'administrator'
+    st.session_state['role'] = 'Administrator'
     st.session_state['first_name'] = 'SysAdmin'
+    logger.info("Logged in as System Administrator")
     st.switch_page('pages/20_Admin_Home.py')
-
-
-

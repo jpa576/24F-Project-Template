@@ -9,6 +9,7 @@ logger = logging.getLogger(__name__)
 st.set_page_config(page_title="User Dashboard", layout="wide")
 # Set the current page when rendering a page
 st.session_state["current_page"] = "User Dashboard"
+st.session_state["role"] = "CS Student"
 
 # Show appropriate sidebar links for the current user's role
 SideBarLinks()

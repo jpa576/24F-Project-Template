@@ -1,9 +1,11 @@
 import streamlit as st
 import pandas as pd
 import requests
+from modules.nav import SideBarLinks
 
 # Set the page configuration
 st.set_page_config(page_title="Manage Courses", layout="wide")
+SideBarLinks()
 
 st.title("📚 Manage Courses")
 st.write("View, add, or remove courses in the system.")

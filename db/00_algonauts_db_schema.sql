@@ -236,7 +236,7 @@ CREATE TABLE UserCareerProgress (
   progress_percentage DECIMAL(5,2) DEFAULT 0.00,
   FOREIGN KEY (user_id) REFERENCES Users(user_id) ON DELETE CASCADE,
   FOREIGN KEY (career_path_id) REFERENCES CareerPaths(career_path_id) ON DELETE CASCADE
-);
+                                );
 
 
 

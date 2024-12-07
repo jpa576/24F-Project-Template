@@ -1,37 +1,38 @@
 import streamlit as st
 from modules.nav import SideBarLinks
 
-
+# Initialize Sidebar Navigation
 SideBarLinks()
 
 # Page Title and Header
 st.title(f"🚀 Q4 2024 Job Market Insights for Aspiring Tech Professionals, {st.session_state['first_name']}!")
-st.write("")
-st.subheader("Welcome to Your Personal Job Market Dashboard")
 st.markdown(
     """
-    Gain data-driven insights into the technology job market. Explore salary trends, in-demand skills, job availability, and more. 
-    Tailored specifically for your career aspirations in computer science and related fields. Let's bridge the gap between your skills and the market demands. 
+    ---
+    **Welcome to Your Personal Job Market Dashboard!**  
+    Gain data-driven insights into the technology job market tailored to your career aspirations.  
+    Explore salary trends, in-demand skills, job availability, and actionable recommendations.  
+    Let's bridge the gap between your potential and market demands!
     """,
     unsafe_allow_html=True,
 )
 
 # Hero Section: Quick Overview
-st.write("")
-st.write("---")
-st.markdown("### 🔍 **What’s Available on Your Dashboard?**")
+st.markdown("### 🔍 **Key Features of Your Dashboard**")
 st.markdown(
     """
-    - **Salary Explorer**: Compare salaries across roles, locations, and industries.
-    - **Skills Demand Analysis**: See which technical skills employers are prioritizing in real time.
-    - **Career Skills**: Visualize recommended skills for any career in our database.
+    - 💼 **Salary Explorer**: Analyze salaries by role, location, and industry.
+    - 📈 **Skills Demand Analysis**: Identify real-time trends in tech skills employers seek.
+    - 🌐 **Career Skills Recommendations**: Discover key skills for careers in computer science and tech fields.
     """
 )
 
-# Interactive Buttons for Navigation
+# Interactive Section: Navigation Buttons
 st.write("")
-st.write("---")
-st.markdown("### 🎯 **Get Started**")
+st.markdown("---")
+st.markdown("### 🎯 **Ready to Dive In? Select an Option Below:**")
+
+# Layout for navigation buttons
 col1, col2, col3 = st.columns(3)
 
 with col1:
@@ -43,17 +44,25 @@ with col2:
         st.switch_page('pages/02_InDemand_Careers.py')
 
 with col3:
-    if st.button("🌍 Explore Careers and their Required Skills"):
+    if st.button("🌐 Explore Careers & Required Skills"):
         st.switch_page('pages/03_career_skills.py')
 
-# Footer with Contact Information and Data Credibility
-st.write("")
-st.write("---")
-
+# Professional Footer with Contact Information
+st.markdown("---")
 st.markdown(
     """
-    ##### 🌟 **Disclaimer**: The insights provided are AI-generated and based on publicly available data sources (e.g., O*NET, Glassdoor). 
-    While we strive for accuracy, always cross-check with official sources before making career decisions. AI-generated data may not 
-    fully capture real-world nuances and trends.
+    #### ⚠️ **Disclaimer**  
+    Insights are AI-generated using reliable data sources (e.g., O*NET, Glassdoor).  
+    While accurate, these insights should be cross-checked with official resources for critical decisions.  
+    Use this tool as a guide to navigate trends and opportunities in the tech industry.
+    """
+)
+
+# Add Contact Information
+st.markdown(
+    """
+    #### 📬 **Contact Support**  
+    Have questions or feedback? Reach out to us at [support@algonauts.com](mailto:support@algonauts.com).  
+    Your input helps us improve!
     """
 )

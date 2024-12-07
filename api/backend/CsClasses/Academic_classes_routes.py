@@ -45,6 +45,7 @@ def get_all_courses():
     except Exception as e:
         current_app.logger.error(f"Error fetching courses: {e}")
         return jsonify({"status": "error", "message": "An error occurred while fetching courses."}), 500
+
 @courses.route('/remove_course', methods=['DELETE'])
 def remove_course():
     """
