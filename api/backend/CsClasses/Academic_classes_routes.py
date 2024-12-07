@@ -32,7 +32,7 @@ def get_all_courses():
         with connection.cursor(pymysql.cursors.DictCursor) as cursor:
             cursor.execute("""
                 SELECT 
-                    course_id, 
+        
                     department, 
                     course_number, 
                     course_name, 
@@ -45,14 +45,34 @@ def get_all_courses():
     except Exception as e:
         current_app.logger.error(f"Error fetching courses: {e}")
         return jsonify({"status": "error", "message": "An error occurred while fetching courses."}), 500
-
-@courses.route('/remove_course/<int:course_id>', methods=['DELETE'])
-def remove_course(course_id):
+@courses.route('/remove_course', methods=['DELETE'])
+def remove_course():
+    """
+    Remove a course based on department and course number.
+    """
     try:
+        # Parse JSON input from the request
+        data = request.get_json()
+        department = data.get("department")
+        course_number = data.get("course_number")
+
+        # Validate required fields
+        if not department or not course_number:
+            return jsonify({"error": "Missing required fields: 'department' and 'course_number'."}), 400
+
         connection = get_db_connection()
         with connection.cursor() as cursor:
-            cursor.execute("DELETE FROM AcademicCourses WHERE course_id = %s", (course_id,))
+            # Execute the DELETE query
+            cursor.execute("""
+                DELETE FROM AcademicCourses
+                WHERE department = %s AND course_number = %s
+            """, (department, course_number))
             connection.commit()
+
+            # Check if a row was deleted
+            if cursor.rowcount == 0:
+                return jsonify({"status": "error", "message": "Course not found."}), 404
+
         return jsonify({"status": "success", "message": "Course removed successfully."}), 200
     except Exception as e:
         current_app.logger.error(f"Error removing course: {e}")

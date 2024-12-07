@@ -8,7 +8,7 @@ st.set_page_config(page_title="Manage Courses", layout="wide")
 st.title("📚 Manage Courses")
 st.write("View, add, or remove courses in the system.")
 
-# API endpoint to fetch and add courses
+# API endpoint to fetch, add, and remove courses
 BASE_COURSE_API_URL = "http://api:4000/c"  # Base URL for course-related API endpoints
 
 def fetch_courses():
@@ -16,7 +16,7 @@ def fetch_courses():
     try:
         response = requests.get(f"{BASE_COURSE_API_URL}/all_courses")
         response.raise_for_status()
-        return response.json()  # Assuming the response is a JSON object
+        return response.json().get("data", [])  # Assuming the response has a "data" field
     except requests.exceptions.RequestException as e:
         st.error(f"Error fetching courses: {e}")
         return []
@@ -32,10 +32,13 @@ def add_course(course_data):
             return False, e.response.json().get("error", "Unknown error occurred")
         return False, str(e)
 
-def remove_course(course_id):
-    """Send a request to the backend to remove a course."""
+def remove_course(department, course_number):
+    """Send a request to the backend to remove a course based on department and course number."""
     try:
-        response = requests.delete(f"{BASE_COURSE_API_URL}/remove_course/{course_id}")
+        response = requests.delete(f"{BASE_COURSE_API_URL}/remove_course", json={
+            "department": department,
+            "course_number": course_number
+        })
         response.raise_for_status()
         return True, None
     except requests.exceptions.RequestException as e:
@@ -53,10 +56,20 @@ if courses:
 
     # Remove a Course Section
     st.markdown("### Remove a Course")
-    course_id_to_remove = st.selectbox("Select a Course to Remove:", df_courses["course_id"])
+    selected_course = st.selectbox(
+        "Select a Course to Remove:",
+        df_courses.apply(lambda x: f"{x['department']} {x['course_number']} - {x['course_name']}", axis=1)
+    )
 
     if st.button("Remove Course"):
-        success, error_message = remove_course(course_id_to_remove)
+        # Extract department and course_number from the selected course
+        selected_index = df_courses.apply(
+            lambda x: f"{x['department']} {x['course_number']} - {x['course_name']}", axis=1
+        ).tolist().index(selected_course)
+        department = df_courses.iloc[selected_index]["department"]
+        course_number = df_courses.iloc[selected_index]["course_number"]
+
+        success, error_message = remove_course(department, course_number)
         if success:
             st.success("Course removed successfully!")
             st.experimental_rerun()  # Refresh the page to reflect changes
