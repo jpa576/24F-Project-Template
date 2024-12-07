@@ -118,3 +118,43 @@ def update_career_progress(user_id, career_path_id):
     except Exception as e:
         current_app.logger.error(f"Error updating career progress: {e}")
         return jsonify({"error": "An error occurred while updating career progress."}), 500
+
+@careers.route('/add_career', methods=['POST'])
+def add_career():
+    """
+    Add a new career to the CareerPaths table.
+    """
+    try:
+        # Parse the request JSON
+        data = request.get_json()
+        career_name = data.get("career_name")
+        description = data.get("description")
+        salary = data.get("salary")
+        demand = data.get("demand")
+
+        # Validate required fields
+        if not all([career_name, description, salary, demand]):
+            return jsonify({"error": "Missing required fields."}), 400
+
+        # Validate salary and demand inputs
+        if not isinstance(salary, (int, float)) or salary < 0:
+            return jsonify({"error": "Invalid salary. Must be a non-negative number."}), 400
+        if not isinstance(demand, (int, float)) or not (1 <= demand <= 5):
+            return jsonify({"error": "Invalid demand. Must be a number between 1 and 5."}), 400
+
+        connection = get_db_connection()
+        with connection.cursor() as cursor:
+            # Insert the new career into the database
+            cursor.execute("""
+                INSERT INTO CareerPaths (career_name, description, salary, demand)
+                VALUES (%s, %s, %s, %s)
+            """, (career_name, description, salary, demand))
+            connection.commit()
+
+        return jsonify({"status": "success", "message": "Career added successfully!"}), 201
+    except pymysql.MySQLError as db_err:
+        current_app.logger.error(f"MySQL Error: {db_err}")
+        return jsonify({"error": f"Database error: {db_err}"}), 500
+    except Exception as e:
+        current_app.logger.error(f"Unexpected error: {e}")
+        return jsonify({"error": f"An unexpected error occurred: {e}"}), 500
